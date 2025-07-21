@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Azure.Messaging.EventHubs" Version="5.12.2" />
+      <PackageReference Include="MudBlazor" Version="8.10.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\favicon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client.csproj" />
+    </ItemGroup>
+
+</Project>

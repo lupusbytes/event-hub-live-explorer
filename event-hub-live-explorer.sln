@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D9A7B78A-CA38-4192-A1B3-B6DFCDA3FD7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LupusBytes.Azure.EventHubs.LiveExplorer.Web", "src\LupusBytes.Azure.EventHubs.LiveExplorer.Web\LupusBytes.Azure.EventHubs.LiveExplorer.Web.csproj", "{49806880-78D6-4963-9C83-36AD8D12E41D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer", "src\LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer\LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer.csproj", "{F641B2A8-2C82-4596-A829-2E649F65F9E4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{68A5C717-DAC1-48F8-BF0B-AD29E053BF92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHost", "sample\AppHost\AppHost.csproj", "{79C1397C-E258-44F0-B3F9-267C79E8658D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client", "src\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client.csproj", "{04E7DF64-FA53-4A74-8496-435194F9C000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts", "src\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts.csproj", "{36A39429-0DB3-4128-B717-612D4FCCD0BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49806880-78D6-4963-9C83-36AD8D12E41D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49806880-78D6-4963-9C83-36AD8D12E41D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49806880-78D6-4963-9C83-36AD8D12E41D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49806880-78D6-4963-9C83-36AD8D12E41D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F641B2A8-2C82-4596-A829-2E649F65F9E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F641B2A8-2C82-4596-A829-2E649F65F9E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F641B2A8-2C82-4596-A829-2E649F65F9E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F641B2A8-2C82-4596-A829-2E649F65F9E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79C1397C-E258-44F0-B3F9-267C79E8658D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79C1397C-E258-44F0-B3F9-267C79E8658D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79C1397C-E258-44F0-B3F9-267C79E8658D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79C1397C-E258-44F0-B3F9-267C79E8658D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04E7DF64-FA53-4A74-8496-435194F9C000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04E7DF64-FA53-4A74-8496-435194F9C000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04E7DF64-FA53-4A74-8496-435194F9C000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04E7DF64-FA53-4A74-8496-435194F9C000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36A39429-0DB3-4128-B717-612D4FCCD0BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36A39429-0DB3-4128-B717-612D4FCCD0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36A39429-0DB3-4128-B717-612D4FCCD0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36A39429-0DB3-4128-B717-612D4FCCD0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{49806880-78D6-4963-9C83-36AD8D12E41D} = {D9A7B78A-CA38-4192-A1B3-B6DFCDA3FD7D}
+		{F641B2A8-2C82-4596-A829-2E649F65F9E4} = {D9A7B78A-CA38-4192-A1B3-B6DFCDA3FD7D}
+		{79C1397C-E258-44F0-B3F9-267C79E8658D} = {68A5C717-DAC1-48F8-BF0B-AD29E053BF92}
+		{04E7DF64-FA53-4A74-8496-435194F9C000} = {D9A7B78A-CA38-4192-A1B3-B6DFCDA3FD7D}
+		{36A39429-0DB3-4128-B717-612D4FCCD0BE} = {D9A7B78A-CA38-4192-A1B3-B6DFCDA3FD7D}
+	EndGlobalSection
+EndGlobal
