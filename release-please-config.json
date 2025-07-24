@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "pull-request-title-pattern": "chore: release version ${version}",
+  "packages": {
+    ".": {
+    }
+  },
+  "extra-files": [
+    "Directory.Build.props",
+    "src/LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer/ImageConstants.cs"
+  ],
+  "changelog-sections": [
+    {
+      "type": "feat",
+      "section": "New features"
+    },
+    {
+      "type": "fix",
+      "scope": "deps",
+      "section": "Upgrades"
+    },
+    {
+      "type": "fix",
+      "section": "Bug fixes"
+    },
+    {
+      "type": "perf",
+      "section": "Performance improvements"
+    },
+    {
+      "type": "revert",
+      "section": "Reverts"
+    }
+  ]
+}

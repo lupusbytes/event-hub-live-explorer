@@ -6,5 +6,5 @@ internal static class ImageConstants
 
     public const string Image = "lupusbytes/event-hub-live-explorer";
 
-    public const string Tag = "1.0.0";
+    public const string Tag = "1.0.0"; // x-release-please-version
 }
