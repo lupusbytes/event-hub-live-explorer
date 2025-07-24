@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Folder Name="/sample/">
+    <Project Path="sample/AppHost/AppHost.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer/LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer.csproj" />
+    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client/LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client.csproj" />
+    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts/LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts.csproj" />
+    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer.Web/LupusBytes.Azure.EventHubs.LiveExplorer.Web.csproj" />
+  </Folder>
+</Solution>
