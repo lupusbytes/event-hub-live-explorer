@@ -26,6 +26,7 @@ RUN dotnet publish --arch $TARGETARCH --no-restore ./src/LupusBytes.Azure.EventH
 
 # Final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble-chiseled
+EXPOSE 5000
 WORKDIR /app
 COPY --from=build /app .
 
