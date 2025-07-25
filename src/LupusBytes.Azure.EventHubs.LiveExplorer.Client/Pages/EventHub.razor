@@ -1,17 +1,14 @@
 @page "/event-hubs/{serviceKey}"
 @using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts
-@using Microsoft.AspNetCore.SignalR.Client
-@inject HttpClient HttpClient
-@implements IAsyncDisposable
 
 <PageTitle>@ServiceKey</PageTitle>
 
 <MudText Typo="Typo.h4" GutterBottom="true">@ServiceKey</MudText>
 
-<MudForm @bind-IsValid="@validMessage">
-    <MudTextField Immediate="true" T="string" Label="Event Hub message" @bind-Value="message" Required="true" RequiredError="A message is required!" Variant="Variant.Outlined" Placeholder="Enter your message..." Lines="3" />
+<MudForm @bind-IsValid="@isValidInput">
+    <MudTextField Immediate="true" T="string" Label="Event Hub message" @bind-Value="input" Required="true" RequiredError="A message is required!" Variant="Variant.Outlined" Placeholder="Enter your message..." Lines="3" />
 </MudForm>
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!validMessage)" OnClick="@(async () => await SubmitAsync())">Submit</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!isValidInput)" OnClick="@(async () => await SubmitAsync())">Submit</MudButton>
 
 @if (messages.Count > 0)
 {
@@ -41,59 +38,4 @@
             <MudTablePager PageSizeOptions="new[] { 10, 25, 50, 100 }"/>
         </PagerContent>
     </MudTable>
-}
-
-@code {
-    [Parameter]
-    public string ServiceKey { get; set; } = "";
-
-    private HubConnection? hubConnection;
-
-    private List<EventHubMessage> messages = [];
-
-    private string message = string.Empty;
-
-    bool validMessage;
-
-    protected override Task OnParametersSetAsync()
-        => InitializeDataAsync();
-
-    private async Task InitializeDataAsync()
-    {
-        // Dispose previous connection if it exists
-        await DisposeAsync();
-
-        messages = await HttpClient.GetFromJsonAsync<List<EventHubMessage>>($"api/event-hubs/{ServiceKey}/messages") ?? [];
-
-        hubConnection = new HubConnectionBuilder()
-            .WithUrl(HttpClient.BaseAddress + "notifications")
-            .Build();
-
-        await hubConnection.StartAsync();
-        await hubConnection.InvokeAsync(nameof(ILiveExplorerHub.JoinGroup), ServiceKey);
-        hubConnection.On<EventHubMessage>(nameof(ILiveExplorerHub.ReadEvent), MessageReceivedHandler);
-    }
-
-    private async Task SubmitAsync()
-    {
-        if (!string.IsNullOrWhiteSpace(message))
-        {
-            await hubConnection!.SendAsync(nameof(ILiveExplorerHub.WriteEvent), ServiceKey, message);
-            message = string.Empty;
-        }
-    }
-
-    void MessageReceivedHandler(EventHubMessage receivedMessage)
-    {
-        messages.Add(receivedMessage);
-        InvokeAsync(StateHasChanged);
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (hubConnection is not null)
-        {
-            await hubConnection.DisposeAsync();
-        }
-    }
 }

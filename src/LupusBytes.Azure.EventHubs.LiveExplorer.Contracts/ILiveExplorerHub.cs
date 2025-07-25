@@ -2,9 +2,7 @@ namespace LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 
 public interface ILiveExplorerHub
 {
-    Task ReadEvent(EventHubMessage message);
+    Task CreateMessage(string serviceKey, string message);
 
-    Task WriteEvent(string message);
-
-    Task JoinGroup(string groupName);
+    Task JoinGroup(string serviceKey);
 }

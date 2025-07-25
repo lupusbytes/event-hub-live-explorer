@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace LupusBytes.Azure.EventHubs.LiveExplorer;
 
-internal class LiveExplorerHub(EventHubServiceProvider serviceProvider) : Hub<ILiveExplorerHub>
+internal class LiveExplorerHub(EventHubServiceProvider serviceProvider) : Hub<ILiveExplorerClient>, ILiveExplorerHub
 {
-    public Task WriteEvent(string eventHub, string message)
+    public Task CreateMessage(string serviceKey, string message)
         => serviceProvider
-            .GetEventHubService(eventHub)
-            .SendEventAsync(
-                message,
-                Context.ConnectionAborted);
+        .GetEventHubService(serviceKey)
+        .SendEventAsync(
+            message,
+            Context.ConnectionAborted);
 
-    public Task JoinGroup(string groupName)
+    public Task JoinGroup(string serviceKey)
         => Groups.AddToGroupAsync(
             Context.ConnectionId,
-            groupName,
+            serviceKey,
             Context.ConnectionAborted);
 }

@@ -11,7 +11,7 @@ internal partial class EventHubService(
     string serviceKey,
     EventHubConsumerClient consumer,
     EventHubProducerClient producer,
-    IHubContext<LiveExplorerHub, ILiveExplorerHub> hubContext,
+    IHubContext<LiveExplorerHub, ILiveExplorerClient> hubContext,
     ILogger<EventHubService> logger)
     : BackgroundService
 {
@@ -45,7 +45,7 @@ internal partial class EventHubService(
                 @event.Data.EventBody.ToString());
 
             messages.Add(message);
-            await hubContext.Clients.Groups(serviceKey).ReadEvent(message);
+            await hubContext.Clients.Groups(serviceKey).LoadMessage(message);
         }
     }
 
