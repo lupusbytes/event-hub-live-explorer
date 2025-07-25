@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client.csproj" />
+      <ProjectReference Include="..\LupusBytes.Azure.EventHubs.LiveExplorer.Client\LupusBytes.Azure.EventHubs.LiveExplorer.Client.csproj" />
     </ItemGroup>
 
 </Project>

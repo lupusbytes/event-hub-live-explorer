@@ -1,7 +1,7 @@
-using LupusBytes.Azure.EventHubs.LiveExplorer.Web;
-using LupusBytes.Azure.EventHubs.LiveExplorer.Web.Components;
-using LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts;
-using LupusBytes.Azure.EventHubs.LiveExplorer.Web.Extensions;
+using LupusBytes.Azure.EventHubs.LiveExplorer;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Components;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Extensions;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +35,7 @@ app.UseAntiforgery();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client._Imports).Assembly);
+    .AddAdditionalAssemblies(typeof(LupusBytes.Azure.EventHubs.LiveExplorer.Client._Imports).Assembly);
 
 app.MapGet("/api/event-hubs/{serviceKey}/messages", (
     string serviceKey,

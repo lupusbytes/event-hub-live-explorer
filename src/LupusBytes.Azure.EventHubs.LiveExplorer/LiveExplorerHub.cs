@@ -1,7 +1,7 @@
-using LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using Microsoft.AspNetCore.SignalR;
 
-namespace LupusBytes.Azure.EventHubs.LiveExplorer.Web;
+namespace LupusBytes.Azure.EventHubs.LiveExplorer;
 
 internal class LiveExplorerHub(EventHubServiceProvider serviceProvider) : Hub<ILiveExplorerHub>
 {

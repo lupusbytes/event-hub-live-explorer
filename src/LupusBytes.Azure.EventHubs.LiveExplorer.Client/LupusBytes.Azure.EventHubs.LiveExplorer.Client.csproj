@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
         <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+        <RootNamespace>LupusBytes.Azure.EventHubs.LiveExplorer.Client</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts\LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts.csproj" />
+      <ProjectReference Include="..\LupusBytes.Azure.EventHubs.LiveExplorer.Contracts\LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

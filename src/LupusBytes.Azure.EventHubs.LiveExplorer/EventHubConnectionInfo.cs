@@ -1,4 +1,4 @@
-namespace LupusBytes.Azure.EventHubs.LiveExplorer.Web;
+namespace LupusBytes.Azure.EventHubs.LiveExplorer;
 
 internal sealed record EventHubConnectionInfo(
     string ServiceKey,

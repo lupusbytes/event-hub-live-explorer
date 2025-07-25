@@ -4,8 +4,8 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer/LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer.csproj" />
-    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client/LupusBytes.Azure.EventHubs.LiveExplorer.Web.Client.csproj" />
-    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts/LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts.csproj" />
-    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer.Web/LupusBytes.Azure.EventHubs.LiveExplorer.Web.csproj" />
+    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer/LupusBytes.Azure.EventHubs.LiveExplorer.csproj" />
+    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer.Client/LupusBytes.Azure.EventHubs.LiveExplorer.Client.csproj" />
+    <Project Path="src/LupusBytes.Azure.EventHubs.LiveExplorer.Contracts/LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.csproj" />
   </Folder>
 </Solution>

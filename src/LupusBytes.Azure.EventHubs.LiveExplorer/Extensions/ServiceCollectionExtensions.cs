@@ -1,9 +1,9 @@
 using Azure.Messaging.EventHubs.Consumer;
 using Azure.Messaging.EventHubs.Producer;
-using LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using Microsoft.AspNetCore.SignalR;
 
-namespace LupusBytes.Azure.EventHubs.LiveExplorer.Web.Extensions;
+namespace LupusBytes.Azure.EventHubs.LiveExplorer.Extensions;
 
 internal static class ServiceCollectionExtensions
 {

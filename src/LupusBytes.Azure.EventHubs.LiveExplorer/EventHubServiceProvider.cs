@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace LupusBytes.Azure.EventHubs.LiveExplorer.Web;
+namespace LupusBytes.Azure.EventHubs.LiveExplorer;
 
 internal class EventHubServiceProvider(IServiceProvider serviceProvider)
 {
