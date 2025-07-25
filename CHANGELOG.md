@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.1.1...v1.2.0) (2025-07-25)
+
+
+### New features
+
+* reuse signalr websockets and use streaming for cached messages ([c89cbc0](https://github.com/lupusbytes/event-hub-live-explorer/commit/c89cbc05d1bdde60d5177dfcb9ca207d0adae9ec))
+* use strongly typed signalr ([967d747](https://github.com/lupusbytes/event-hub-live-explorer/commit/967d74735fbd34ea94129b4970b3850a3349ec94))
+
 ## [1.1.1](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.1.0...v1.1.1) (2025-07-24)
 
 
