@@ -37,13 +37,6 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(LupusBytes.Azure.EventHubs.LiveExplorer.Client._Imports).Assembly);
 
-app.MapGet("/api/event-hubs/{serviceKey}/messages", (
-    string serviceKey,
-    EventHubServiceProvider serviceProvider)
-    => serviceProvider.TryGetEventHubService(serviceKey, out var eventHubService)
-        ? Results.Json(eventHubService.Messages)
-        : Results.NotFound());
-
 app.MapGet("/api/event-hubs/", (
     IEnumerable<EventHubConnectionInfo> eventHubConnections)
     => Results.Json(eventHubConnections.Select(x => new EventHubInfo(x.Endpoint, x.ServiceKey))));

@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Http.Json;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -8,39 +7,49 @@ using TypedSignalR.Client;
 namespace LupusBytes.Azure.EventHubs.LiveExplorer.Client.Pages;
 
 [SuppressMessage("Maintainability", "CA1515:Consider making public types internal",  Justification = "Impossible")]
-public sealed partial class EventHub(HttpClient httpClient) : ComponentBase, ILiveExplorerClient, IAsyncDisposable
+public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyncDisposable
 {
+    private readonly HubConnection connection;
+    private readonly ILiveExplorerHub hub;
+    private readonly IDisposable? subscription;
+    private readonly List<EventHubMessage> messages = [];
+
     [Parameter]
     public string ServiceKey { get; set; } = string.Empty;
 
-    private ILiveExplorerHub hub = null!;
-
-    private HubConnection? connection;
-
-    private List<EventHubMessage> messages = [];
+    private string? lastServiceKey;
 
     private string input = string.Empty;
 
     private bool isValidInput;
 
-    private IDisposable? subscription;
-
-    protected override Task OnParametersSetAsync()
-        => InitializeDataAsync();
-
-    private async Task InitializeDataAsync()
+    public EventHub(HttpClient httpClient)
     {
-        // Dispose previous connection if it exists
-        await DisposeAsync();
-
-        messages = await httpClient.GetFromJsonAsync<List<EventHubMessage>>($"api/event-hubs/{ServiceKey}/messages") ?? [];
-
         connection = new HubConnectionBuilder().WithUrl(httpClient.BaseAddress + "notifications").Build();
         hub = connection.CreateHubProxy<ILiveExplorerHub>();
         subscription = connection.Register<ILiveExplorerClient>(this);
+    }
 
-        await connection.StartAsync();
-        await hub.JoinGroup(ServiceKey);
+    protected override async Task OnParametersSetAsync()
+    {
+        if (connection is not { State: HubConnectionState.Connected or HubConnectionState.Connecting })
+        {
+            await connection.StartAsync();
+        }
+
+        if (lastServiceKey is not null)
+        {
+            messages.Clear();
+            await hub.LeaveGroup(lastServiceKey);
+            await InvokeAsync(StateHasChanged);
+        }
+
+        lastServiceKey = ServiceKey;
+
+        await foreach (var message in hub.JoinGroupAndGetMessages(ServiceKey))
+        {
+            messages.Add(message);
+        }
     }
 
     public Task LoadMessage(EventHubMessage message)
@@ -58,13 +67,9 @@ public sealed partial class EventHub(HttpClient httpClient) : ComponentBase, ILi
         }
     }
 
-    public async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         subscription?.Dispose();
-
-        if (connection is not null)
-        {
-            await connection.DisposeAsync();
-        }
+        return connection.DisposeAsync();
     }
 }
