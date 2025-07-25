@@ -19,7 +19,7 @@ internal static class ServiceCollectionExtensions
                     (string)serviceKey!,
                     new EventHubConsumerClient(eventHub.ConsumerGroup, eventHub.ConnectionString),
                     new EventHubProducerClient(eventHub.ConnectionString),
-                    sp.GetRequiredService<IHubContext<LiveExplorerHub, ILiveExplorerHub>>(),
+                    sp.GetRequiredService<IHubContext<LiveExplorerHub, ILiveExplorerClient>>(),
                     sp.GetRequiredService<ILogger<EventHubService>>()));
 
             services.AddSingleton<IHostedService>(
