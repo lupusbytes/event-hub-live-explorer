@@ -1,4 +1,4 @@
-namespace LupusBytes.Azure.EventHubs.LiveExplorer.Web.Extensions;
+namespace LupusBytes.Azure.EventHubs.LiveExplorer.Extensions;
 
 internal static class ConfigurationExtensions
 {

@@ -1,4 +1,4 @@
-namespace LupusBytes.Azure.EventHubs.LiveExplorer.Web.Contracts;
+namespace LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 
 public interface ILiveExplorerHub
 {
