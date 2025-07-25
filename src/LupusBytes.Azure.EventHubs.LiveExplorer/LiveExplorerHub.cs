@@ -12,8 +12,24 @@ internal class LiveExplorerHub(EventHubServiceProvider serviceProvider) : Hub<IL
             message,
             Context.ConnectionAborted);
 
-    public Task JoinGroup(string serviceKey)
-        => Groups.AddToGroupAsync(
+    public async IAsyncEnumerable<EventHubMessage> JoinGroupAndGetMessages(string serviceKey)
+    {
+        var eventHubService = serviceProvider.GetEventHubService(serviceKey);
+        var messagesCount = eventHubService.Messages.Count;
+
+        await Groups.AddToGroupAsync(
+            Context.ConnectionId,
+            serviceKey,
+            Context.ConnectionAborted);
+
+        foreach (var message in eventHubService.Messages.Take(messagesCount))
+        {
+            yield return message;
+        }
+    }
+
+    public Task LeaveGroup(string serviceKey)
+        => Groups.RemoveFromGroupAsync(
             Context.ConnectionId,
             serviceKey,
             Context.ConnectionAborted);

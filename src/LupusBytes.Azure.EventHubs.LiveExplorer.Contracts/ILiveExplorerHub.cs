@@ -4,5 +4,7 @@ public interface ILiveExplorerHub
 {
     Task CreateMessage(string serviceKey, string message);
 
-    Task JoinGroup(string serviceKey);
+    IAsyncEnumerable<EventHubMessage> JoinGroupAndGetMessages(string serviceKey);
+
+    Task LeaveGroup(string serviceKey);
 }
