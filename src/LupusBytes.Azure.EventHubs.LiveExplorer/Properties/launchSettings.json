@@ -8,7 +8,8 @@
         "applicationUrl": "http://localhost:5147",
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+        },
+        "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}"
       },
       "https": {
         "commandName": "Project",
@@ -17,7 +18,8 @@
         "applicationUrl": "https://localhost:7295;http://localhost:5147",
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+        },
+        "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}"
       }
     }
   }
