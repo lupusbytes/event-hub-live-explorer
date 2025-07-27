@@ -41,7 +41,6 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         {
             messages.Clear();
             await hub.LeaveGroup(lastServiceKey);
-            await InvokeAsync(StateHasChanged);
         }
 
         lastServiceKey = ServiceKey;
