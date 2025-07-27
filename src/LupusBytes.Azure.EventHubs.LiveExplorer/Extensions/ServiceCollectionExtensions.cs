@@ -1,6 +1,8 @@
 using Azure.Messaging.EventHubs.Consumer;
 using Azure.Messaging.EventHubs.Producer;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LupusBytes.Azure.EventHubs.LiveExplorer.Extensions;
@@ -33,14 +35,22 @@ internal static class ServiceCollectionExtensions
 
     public static IServiceCollection AddPrerenderServices(this IServiceCollection services)
     {
-        services.AddHttpContextAccessor();
         services.AddScoped<HttpClient>(sp =>
         {
-            var httpContext = sp.GetRequiredService<IHttpContextAccessor>().HttpContext;
-            var request = httpContext!.Request;
-            var baseUrl = $"{request.Scheme}://{request.Host}";
+            var serverAddress = sp
+                .GetRequiredService<IServer>().Features
+                .Get<IServerAddressesFeature>()?.Addresses
+                .FirstOrDefault() ?? throw new InvalidOperationException("Could not find any server addresses");
 
-            return new HttpClient { BaseAddress = new Uri(baseUrl) };
+            var baseAddress = new Uri(serverAddress);
+
+            // Replace 0.0.0.0 and [::] with localhost
+            if (baseAddress.Host is "0.0.0.0" or "[::]")
+            {
+                baseAddress = new UriBuilder(baseAddress) { Host = "localhost" }.Uri;
+            }
+
+            return new HttpClient { BaseAddress = baseAddress };
         });
 
         return services;
