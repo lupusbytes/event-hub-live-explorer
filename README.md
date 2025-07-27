@@ -8,7 +8,7 @@ Built with .NET Aspire in mind, it integrates smoothly into Aspire dashboards an
 
 ## ✨ Features
 
-- 🔌 **Send messages** directly to Event Hubs
+- 📤 **Send messages** directly to Event Hubs
 - 📥 **Read events** from multiple partitions in real time
 - 🧪 Ideal for local development and testing of event-based systems
 - 🛠️ Designed to easily integrate with Aspire and 
