@@ -70,5 +70,5 @@ explorer.WithAutoReferences(consumerGroupName: "explorer");
 ```
 This will scan the application model for Azure Event Hub resources and add them as references using the provided consumer group.
 
->⚠️ This must be called after every desired Azure Event Hub has already been added to the application model.
+>⚠️ This method must be called after every desired Azure Event Hub has already been added to the application model.
 Azure Event Hubs added after invocation of this method will not be referenced!
