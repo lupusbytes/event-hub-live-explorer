@@ -13,6 +13,7 @@ builder.Services
 
 builder.Services
     .AddEventHubServices(builder.Configuration)
+    .AddPrerenderServices()
     .AddSignalR();
 
 var app = builder.Build();

@@ -30,4 +30,19 @@ internal static class ServiceCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddPrerenderServices(this IServiceCollection services)
+    {
+        services.AddHttpContextAccessor();
+        services.AddScoped<HttpClient>(sp =>
+        {
+            var httpContext = sp.GetRequiredService<IHttpContextAccessor>().HttpContext;
+            var request = httpContext!.Request;
+            var baseUrl = $"{request.Scheme}://{request.Host}";
+
+            return new HttpClient { BaseAddress = new Uri(baseUrl) };
+        });
+
+        return services;
+    }
 }
