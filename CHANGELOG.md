@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.3.0...v1.3.1) (2025-07-27)
+
+
+### Bug fixes
+
+* **docker:** use internal port when creating prerender httpclient ([46c8328](https://github.com/lupusbytes/event-hub-live-explorer/commit/46c8328631941ed5a09235ed0288ff226b9518a8))
+
 ## [1.3.0](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.2.0...v1.3.0) (2025-07-27)
 
 
