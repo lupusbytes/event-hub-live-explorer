@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.2.0...v1.3.0) (2025-07-27)
+
+
+### New features
+
+* enable prerendering ([2e721dd](https://github.com/lupusbytes/event-hub-live-explorer/commit/2e721ddfc60897c3991f99f84b4b9cd7f6c6a5e0))
+
+
+### Performance improvements
+
+* remove unnecessary statehaschanged invocation ([35a1159](https://github.com/lupusbytes/event-hub-live-explorer/commit/35a1159923c6d9dda7fe2051bbfd30c3b15d9e4d))
+
 ## [1.2.0](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.1.1...v1.2.0) (2025-07-25)
 
 
