@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.3.2...v1.3.3) (2025-08-02)
+
+
+### Bug fixes
+
+* add symbols and metadata to nuget package ([d17128c](https://github.com/lupusbytes/event-hub-live-explorer/commit/d17128c8cdf7838d555de17ebe5aab45ab93360e))
+
 ## [1.3.2](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.3.1...v1.3.2) (2025-08-02)
 
 
