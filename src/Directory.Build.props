@@ -6,6 +6,39 @@
   -->
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.props))\Directory.Build.props" />
 
+  <!-- Global nuget package configurations that should not be needed to change -->
+  <PropertyGroup Label="Global Nuget Package metadata">
+    <RepositoryUrl>https://github.com/$(OrganizationName)/$(RepositoryName)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/$(OrganizationName)/$(RepositoryName)</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\docs\images\icon.png" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+
+  <PropertyGroup Label="Build instructions">
+    <OutputType>Library</OutputType>
+    <!-- Creates a regular package and a symbols package -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <!-- Creates symbol package in the new .snupkg format -->
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!--
+      Instruct the build system to embed project source files that are not tracked by the source control
+      or imported from a source package to the generated PDB.
+    -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
+    <DebugType>embedded</DebugType>
+    <!-- Will generate nuget packages for each project -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <!-- Web projects aren't packable by default. To override the default behavior, add the following -->
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
   <ItemGroup>
     <!-- Makes internal types in libraries visible to their test projects -->
     <InternalsVisibleTo Include="$(AssemblyName).Tests" />
