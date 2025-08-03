@@ -1,7 +1,8 @@
-﻿<Solution>
+<Solution>
   <Folder Name="/sample/"/>
   <Folder Name="/sample/basic/">
     <Project Path="sample/basic/Basic.AppHost/Basic.AppHost.csproj" />
+    <Project Path="sample/basic/Basic.Auto.AppHost/Basic.Auto.AppHost.csproj" />
   </Folder>
   <Folder Name="/sample/event-producer/">
     <Project Path="sample/event-producer/EventProducer.AppHost/EventProducer.AppHost.csproj" />
