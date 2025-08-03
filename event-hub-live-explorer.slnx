@@ -1,6 +1,11 @@
 ﻿<Solution>
-  <Folder Name="/sample/">
-    <Project Path="sample/AppHost/AppHost.csproj" />
+  <Folder Name="/sample/"/>
+  <Folder Name="/sample/basic/">
+    <Project Path="sample/basic/Basic.AppHost/Basic.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/sample/event-producer/">
+    <Project Path="sample/event-producer/EventProducer.AppHost/EventProducer.AppHost.csproj" />
+    <Project Path="sample/event-producer/EventProducer/EventProducer.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer/LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer.csproj" />

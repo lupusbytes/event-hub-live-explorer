@@ -7,7 +7,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <UserSecretsId>dc8bf6f8-de00-4474-8f16-e8382aa697ab</UserSecretsId>
+        <UserSecretsId>2f6764a9-5040-41f1-8cfa-ff1889b17a28</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,8 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer\LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer.csproj"
+      <ProjectReference Include="..\..\..\src\LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer\LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer.csproj"
                         IsAspireProjectResource="false" />
+      <ProjectReference Include="..\EventProducer\EventProducer.csproj" />
     </ItemGroup>
 
 </Project>

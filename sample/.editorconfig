@@ -1,0 +1,7 @@
+##########################################
+# Code Analyzers Rules
+##########################################
+[*.{cs,csx,cake}]
+dotnet_diagnostic.MA0076.severity = none        # MA0076: Do not use implicit culture-sensitive ToString in interpolated strings
+dotnet_diagnostic.CA5394.severity = none		# CA5394: Do not use insecure randomness
+dotnet_diagnostic.SCS0005.severity = none       # SCS0005: Weak random number generator
