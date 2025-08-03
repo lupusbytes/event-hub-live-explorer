@@ -33,14 +33,14 @@ dotnet add package LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer
 
 #### Add **Event Hub Live Explorer** to your Aspire Dashboard
 ```csharp
-var explorer = builder.AddEventHubLiveExplorer();
+var explorer = builder.AddAzureEventHubsLiveExplorer();
 ```
 
 #### Reference an Event Hub
 ```csharp
 var eventHub = builder
    .AddAzureEventHubs("event-hub-namespace").RunAsEmulator()
-   .AddEventHub("event-hub");
+   .AddHub("event-hub");
 
 explorer.WithReference(eventHub);
 ```
