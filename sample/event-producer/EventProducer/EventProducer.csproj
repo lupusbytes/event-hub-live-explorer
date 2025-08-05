@@ -10,8 +10,8 @@
 
     <ItemGroup>
       <PackageReference Include="Aspire.Azure.Messaging.EventHubs" Version="9.4.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
     </ItemGroup>
 
 </Project>
