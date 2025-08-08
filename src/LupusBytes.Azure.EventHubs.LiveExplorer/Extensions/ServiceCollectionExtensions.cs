@@ -1,6 +1,9 @@
+using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Consumer;
 using Azure.Messaging.EventHubs.Producer;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Handlers;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.SignalR;
@@ -19,6 +22,7 @@ internal static class ServiceCollectionExtensions
                 eventHub.ServiceKey,
                 (sp, serviceKey) => new EventHubService(
                     (string)serviceKey!,
+                    eventHub.Endpoint,
                     new EventHubConsumerClient(eventHub.ConsumerGroup, eventHub.ConnectionString),
                     new EventHubProducerClient(eventHub.ConnectionString),
                     sp.GetRequiredService<IHubContext<LiveExplorerHub, ILiveExplorerClient>>(),
@@ -55,4 +59,10 @@ internal static class ServiceCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddApiEndpointHandlers(this IServiceCollection services)
+        => services
+            .AddSingleton<GetEventHubsHandler>()
+            .AddSingleton<GetEventHubHandler>()
+            .AddSingleton<GetEventHubPartitionEventsHandler>();
 }

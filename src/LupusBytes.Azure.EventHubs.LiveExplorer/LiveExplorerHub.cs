@@ -1,4 +1,5 @@
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LupusBytes.Azure.EventHubs.LiveExplorer;
@@ -12,25 +13,20 @@ internal class LiveExplorerHub(EventHubServiceProvider serviceProvider) : Hub<IL
             message,
             Context.ConnectionAborted);
 
-    public async IAsyncEnumerable<EventHubMessage> JoinGroupAndGetMessages(string serviceKey)
-    {
-        var eventHubService = serviceProvider.GetEventHubService(serviceKey);
-        var messagesCount = eventHubService.Messages.Count;
-
-        await Groups.AddToGroupAsync(
+    public Task JoinGroup(
+        string serviceKey,
+        string partitionId)
+        => Groups.AddToGroupAsync(
             Context.ConnectionId,
-            serviceKey,
+            GetGroupName(serviceKey, partitionId),
             Context.ConnectionAborted);
 
-        foreach (var message in eventHubService.Messages.Take(messagesCount))
-        {
-            yield return message;
-        }
-    }
-
-    public Task LeaveGroup(string serviceKey)
+    public Task LeaveGroup(string serviceKey, string partitionId)
         => Groups.RemoveFromGroupAsync(
             Context.ConnectionId,
-            serviceKey,
+            GetGroupName(serviceKey, partitionId),
             Context.ConnectionAborted);
+
+    private static string GetGroupName(string serviceKey, string partitionId)
+        => $"{serviceKey}-{partitionId}";
 }

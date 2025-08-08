@@ -1,4 +1,4 @@
-namespace LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
+namespace LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 
 public interface ILiveExplorerClient
 {

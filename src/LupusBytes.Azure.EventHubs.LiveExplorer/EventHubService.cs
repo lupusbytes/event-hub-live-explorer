@@ -3,25 +3,35 @@ using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Consumer;
 using Azure.Messaging.EventHubs.Producer;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 using Microsoft.AspNetCore.SignalR;
+using Polly;
 
 namespace LupusBytes.Azure.EventHubs.LiveExplorer;
 
 internal partial class EventHubService(
     string serviceKey,
+    string endpoint,
     EventHubConsumerClient consumer,
     EventHubProducerClient producer,
     IHubContext<LiveExplorerHub, ILiveExplorerClient> hubContext,
     ILogger<EventHubService> logger)
     : BackgroundService
 {
-    private readonly List<EventHubMessage> messages = [];
+    private Dictionary<string, List<EventHubMessage>> partitions = [];
 
-    public IReadOnlyCollection<EventHubMessage> Messages => messages;
+    public string ServiceKey => serviceKey;
+
+    public string Endpoint => endpoint;
+
+    public IReadOnlyCollection<string> PartitionIds => partitions.Keys;
 
     [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We never want to crash here")]
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        var partitionIds = await GetPartitionIds(stoppingToken);
+        partitions = partitionIds.ToDictionary(id => id, _ => new List<EventHubMessage>(), StringComparer.Ordinal);
+
         while (!stoppingToken.IsCancellationRequested)
         {
             try
@@ -44,10 +54,20 @@ internal partial class EventHubService(
                 @event.Data.SequenceNumber,
                 @event.Data.EventBody.ToString());
 
-            messages.Add(message);
-            await hubContext.Clients.Groups(serviceKey).LoadMessage(message);
+            partitions[@event.Partition.PartitionId].Add(message);
+            await hubContext.Clients.Groups($"{serviceKey}-{@event.Partition.PartitionId}").LoadMessage(message);
         }
     }
+
+    private Task<string[]> GetPartitionIds(CancellationToken cancellationToken) => Policy
+        .Handle<Exception>()
+        .WaitAndRetryAsync(
+            retryCount: 3,
+            sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2.5, attempt)))
+        .ExecuteAsync(consumer.GetPartitionIdsAsync, cancellationToken);
+
+    public bool TryGetEventsFromPartition(string partitionId, [NotNullWhen(true)] out List<EventHubMessage>? eventHubMessages)
+        => partitions.TryGetValue(partitionId, out eventHubMessages);
 
     public async Task SendEventAsync(string message, CancellationToken cancellationToken = default)
     {
