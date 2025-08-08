@@ -8,7 +8,7 @@
 <MudForm @bind-IsValid="@isValidInput">
     <MudTextField Immediate="true" T="string" Label="Event Hub message" @bind-Value="input" Required="true" RequiredError="A message is required!" Variant="Variant.Outlined" Placeholder="Enter your message..." Lines="3" />
 </MudForm>
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!isValidInput)" OnClick="@(async () => await SubmitAsync())">Submit</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!isValidInput)" OnClick="@(() => SubmitAsync())">Submit</MudButton>
 
 @if (messages.Count > 0)
 {
