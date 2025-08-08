@@ -16,22 +16,27 @@
         <ColGroup>
             <col style="width: 10%;" />
             <col style="width: 10%;" />
-            <col style="width: 80%;" />
+            <col style="width: 10%;" />
+            <col style="width: 70%;" />
         </ColGroup>
         <HeaderContent>
             <MudTh>
-                <MudTableSortLabel SortBy="new Func<EventHubMessage, object>(x => x.PartitionId)">Partition ID</MudTableSortLabel>
+                <MudTableSortLabel InitialDirection="SortDirection.Descending" SortBy="new Func<EventHubMessage, object>(x => x.EnqueuedTime)">Enqueued Time</MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Descending" SortBy="new Func<EventHubMessage, object>(x => x.SequenceNumber)">Sequence Number</MudTableSortLabel>
+                <MudTableSortLabel SortBy="new Func<EventHubMessage, object>(x => x.SequenceNumber)">Sequence Number</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<EventHubMessage, object>(x => x.PartitionId)">Partition ID</MudTableSortLabel>
             </MudTh>
             <MudTh>
                 <MudTableSortLabel SortBy="new Func<EventHubMessage, object>(x => x.Message)">Message</MudTableSortLabel>
             </MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Partition ID">@context.PartitionId</MudTd>
+            <MudTd DataLabel="Enqueued Time">@context.EnqueuedTime.ToLocalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffzzz")</MudTd>
             <MudTd DataLabel="Sequence Number">@context.SequenceNumber</MudTd>
+            <MudTd DataLabel="Partition ID">@context.PartitionId</MudTd>
             <MudTd DataLabel="Message">@context.Message</MudTd>
         </RowTemplate>
         <PagerContent>

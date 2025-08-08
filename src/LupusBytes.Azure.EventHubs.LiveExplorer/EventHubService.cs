@@ -52,6 +52,7 @@ internal partial class EventHubService(
             var message = new EventHubMessage(
                 @event.Partition.PartitionId,
                 @event.Data.SequenceNumber,
+                @event.Data.EnqueuedTime,
                 @event.Data.EventBody.ToString());
 
             partitions[@event.Partition.PartitionId].Add(message);
