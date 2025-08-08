@@ -1,3 +1,4 @@
+@using LupusBytes.Azure.EventHubs.LiveExplorer.Client.Extensions
 @using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts
 @inject HttpClient HttpClient;
 
@@ -47,7 +48,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        eventHubs = await HttpClient.GetFromJsonAsync<List<EventHubInfo>>("api/event-hubs") ?? [];
+        eventHubs = await HttpClient.GetEventHubsAsync();
         await InvokeAsync(StateHasChanged);
     }
 }

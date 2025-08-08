@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Client.Extensions;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using TypedSignalR.Client;
@@ -9,15 +11,19 @@ namespace LupusBytes.Azure.EventHubs.LiveExplorer.Client.Pages;
 [SuppressMessage("Maintainability", "CA1515:Consider making public types internal",  Justification = "Impossible")]
 public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyncDisposable
 {
+    private readonly List<EventHubMessage> messages = [];
     private readonly HubConnection connection;
     private readonly ILiveExplorerHub hub;
     private readonly IDisposable? subscription;
-    private readonly List<EventHubMessage> messages = [];
+    private readonly HttpClient httpClient;
+    private EventHubInfo? eventHub;
 
     [Parameter]
     public string ServiceKey { get; set; } = string.Empty;
 
     private string? lastServiceKey;
+
+    private IReadOnlyCollection<string>? lastPartitionIds;
 
     private string input = string.Empty;
 
@@ -25,6 +31,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
 
     public EventHub(HttpClient httpClient)
     {
+        this.httpClient = httpClient;
         connection = new HubConnectionBuilder().WithUrl(httpClient.BaseAddress + "notifications").Build();
         hub = connection.CreateHubProxy<ILiveExplorerHub>();
         subscription = connection.Register<ILiveExplorerClient>(this);
@@ -32,23 +39,42 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
 
     protected override async Task OnParametersSetAsync()
     {
+        eventHub = await httpClient.GetEventHubAsync(ServiceKey);
+
         if (connection is not { State: HubConnectionState.Connected or HubConnectionState.Connecting })
         {
             await connection.StartAsync();
         }
 
-        if (lastServiceKey is not null)
+        if (lastServiceKey is not null && lastPartitionIds is not null)
         {
+            foreach (var partitionId in lastPartitionIds)
+            {
+                await hub.LeaveGroup(lastServiceKey, partitionId);
+            }
+
             messages.Clear();
-            await hub.LeaveGroup(lastServiceKey);
         }
 
         lastServiceKey = ServiceKey;
+        lastPartitionIds = eventHub!.PartitionIds;
 
-        await foreach (var message in hub.JoinGroupAndGetMessages(ServiceKey))
+        foreach (var partitionId in eventHub.PartitionIds)
         {
-            messages.Add(message);
+            await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(ServiceKey, partitionId))
+            {
+                messages.Add(message);
+
+                if (messages.Count % 50 == 0)
+                {
+                    await InvokeAsync(StateHasChanged);
+                }
+            }
+
+            await hub.JoinGroup(ServiceKey, partitionId);
         }
+
+        await InvokeAsync(StateHasChanged);
     }
 
     public Task LoadMessage(EventHubMessage message)

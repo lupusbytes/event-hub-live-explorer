@@ -22,4 +22,7 @@ internal class EventHubServiceProvider(IServiceProvider serviceProvider)
         string serviceKey,
         [NotNullWhen(true)] out EventHubService? eventHubService)
         => eventHubServices.TryGetValue(serviceKey, out eventHubService);
+
+    public IEnumerable<EventHubService> GetEventHubServices()
+        => eventHubServices.Values;
 }

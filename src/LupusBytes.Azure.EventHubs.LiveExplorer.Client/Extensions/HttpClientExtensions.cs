@@ -1,0 +1,63 @@
+using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
+
+namespace LupusBytes.Azure.EventHubs.LiveExplorer.Client.Extensions;
+
+internal static class HttpClientExtensions
+{
+    public static async Task<List<EventHubInfo>> GetEventHubsAsync(
+        this HttpClient httpClient,
+        CancellationToken cancellationToken = default)
+    {
+        var eventHubs = await httpClient.GetFromJsonAsync<List<EventHubInfo>>(
+            "api/event-hubs",
+            cancellationToken);
+
+        return eventHubs!;
+    }
+
+    public static async Task<EventHubInfo> GetEventHubAsync(
+        this HttpClient httpClient,
+        string serviceKey,
+        CancellationToken cancellationToken = default)
+    {
+        var eventHub = await httpClient.GetFromJsonAsync<EventHubInfo>(
+            $"api/event-hubs/{serviceKey}",
+            cancellationToken);
+
+        return eventHub!;
+    }
+
+    public static async IAsyncEnumerable<EventHubMessage> GetEventHubPartitionMessagesAsync(
+        this HttpClient httpClient,
+        string serviceKey,
+        string partitionId,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        string? continuationToken = null;
+        do
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                yield break;
+            }
+
+            var url = continuationToken is null
+                ? $"api/event-hubs/{serviceKey}/partitions/{partitionId}/events"
+                : $"api/event-hubs/{serviceKey}/partitions/{partitionId}/events?continuationToken={continuationToken}";
+
+            var messagesByPartitionId = await httpClient.GetFromJsonAsync<PagedResult<EventHubMessage>>(
+                url,
+                cancellationToken);
+
+            foreach (var message in messagesByPartitionId!.Items)
+            {
+                yield return message;
+            }
+
+            continuationToken = messagesByPartitionId.ContinuationToken;
+        }
+        while (continuationToken is not null);
+    }
+}

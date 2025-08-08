@@ -13,6 +13,7 @@ builder.Services
 
 builder.Services
     .AddEventHubServices(builder.Configuration)
+    .AddApiEndpointHandlers()
     .AddPrerenderServices()
     .AddSignalR();
 
@@ -38,9 +39,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(LupusBytes.Azure.EventHubs.LiveExplorer.Client._Imports).Assembly);
 
-app.MapGet("/api/event-hubs/", (
-    IEnumerable<EventHubConnectionInfo> eventHubConnections)
-    => Results.Json(eventHubConnections.Select(x => new EventHubInfo(x.Endpoint, x.ServiceKey))));
+app.MapApiEndpoints();
 
 await app.RunAsync();
 
