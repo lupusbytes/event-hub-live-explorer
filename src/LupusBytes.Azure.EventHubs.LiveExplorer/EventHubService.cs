@@ -56,7 +56,7 @@ internal partial class EventHubService(
                 @event.Data.EventBody.ToString());
 
             partitions[@event.Partition.PartitionId].Add(message);
-            await hubContext.Clients.Groups($"{serviceKey}-{@event.Partition.PartitionId}").LoadMessage(message);
+            await hubContext.Clients.Groups($"{serviceKey}-{@event.Partition.PartitionId}").LoadMessage(serviceKey, message);
         }
     }
 

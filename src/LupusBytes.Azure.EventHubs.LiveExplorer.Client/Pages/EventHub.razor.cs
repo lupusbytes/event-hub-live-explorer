@@ -18,6 +18,9 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     private readonly HttpClient httpClient;
     private EventHubInfo? eventHub;
 
+    private CancellationTokenSource? processParametersCts;
+    private Task? processParametersTask;
+
     [Parameter]
     public string ServiceKey { get; set; } = string.Empty;
 
@@ -33,19 +36,43 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     {
         this.httpClient = httpClient;
         connection = new HubConnectionBuilder().WithUrl(httpClient.BaseAddress + "notifications").Build();
-        hub = connection.CreateHubProxy<ILiveExplorerHub>();
+        hub = connection.CreateHubProxy<ILiveExplorerHub>(CancellationToken.None);
         subscription = connection.Register<ILiveExplorerClient>(this);
     }
 
+    protected override Task OnInitializedAsync()
+        => connection.StartAsync(CancellationToken.None);
+
     protected override async Task OnParametersSetAsync()
     {
-        eventHub = await httpClient.GetEventHubAsync(ServiceKey);
+        var newCts = new CancellationTokenSource();
+        var oldCts = Interlocked.Exchange(ref processParametersCts, newCts);
+        var oldTask = processParametersTask;
 
-        if (connection is not { State: HubConnectionState.Connected or HubConnectionState.Connecting })
+        if (oldCts is not null)
         {
-            await connection.StartAsync();
+            await oldCts.CancelAsync();
+
+            if (oldTask is not null)
+            {
+                try
+                {
+                    await oldTask;
+                }
+                catch (OperationCanceledException)
+                {
+                    // Ignore
+                }
+            }
+
+            oldCts.Dispose();
         }
 
+        processParametersTask = ProcessParametersAsync(newCts.Token);
+    }
+
+    private async Task ProcessParametersAsync(CancellationToken cancellationToken)
+    {
         if (lastServiceKey is not null && lastPartitionIds is not null)
         {
             foreach (var partitionId in lastPartitionIds)
@@ -56,12 +83,13 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             messages.Clear();
         }
 
+        eventHub = await httpClient.GetEventHubAsync(ServiceKey, cancellationToken);
         lastServiceKey = ServiceKey;
         lastPartitionIds = eventHub!.PartitionIds;
 
         foreach (var partitionId in eventHub.PartitionIds)
         {
-            await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(ServiceKey, partitionId))
+            await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(ServiceKey, partitionId, cancellationToken))
             {
                 messages.Add(message);
 
@@ -71,14 +99,21 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
                 }
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             await hub.JoinGroup(ServiceKey, partitionId);
         }
 
         await InvokeAsync(StateHasChanged);
     }
 
-    public Task LoadMessage(EventHubMessage message)
+    public Task LoadMessage(string serviceKey, EventHubMessage message)
     {
+        if (serviceKey != ServiceKey)
+        {
+            return Task.CompletedTask;
+        }
+
         messages.Add(message);
         return InvokeAsync(StateHasChanged);
     }
@@ -95,6 +130,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     public ValueTask DisposeAsync()
     {
         subscription?.Dispose();
+        processParametersCts?.Dispose();
         return connection.DisposeAsync();
     }
 }
