@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.0](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.3.4...v1.4.0) (2025-08-09)
+
+
+### New features
+
+* add clear button ([b6f2998](https://github.com/lupusbytes/event-hub-live-explorer/commit/b6f29989ad8012c8a33f6d66ce474b66735505b8))
+* add enqueued time to table ([f47d39f](https://github.com/lupusbytes/event-hub-live-explorer/commit/f47d39f64a9909e9cab3378d76632acd2d9f27a0))
+* add pause/play button to toggle event streaming ([8eb6a9e](https://github.com/lupusbytes/event-hub-live-explorer/commit/8eb6a9e335c4b9fc64c00f245268d5dc2d5bfe3b))
+* implement cancellation tokens to avoid race conditions when rapidly switching between event hubs ([cc72b74](https://github.com/lupusbytes/event-hub-live-explorer/commit/cc72b7470ccbfea8b3eb475e368b8f9cae85b3d1))
+
+
+### Performance improvements
+
+* use api endpoint with paged results to load historic events ([48cb5ee](https://github.com/lupusbytes/event-hub-live-explorer/commit/48cb5ee9e352a9613761509ce4104d64ec32d524))
+
 ## [1.3.4](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.3.3...v1.3.4) (2025-08-05)
 
 
