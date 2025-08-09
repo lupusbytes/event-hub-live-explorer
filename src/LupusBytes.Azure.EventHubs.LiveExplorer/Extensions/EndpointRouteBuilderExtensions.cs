@@ -20,8 +20,9 @@ internal static class EndpointRouteBuilderExtensions
             [FromServices] GetEventHubPartitionEventsHandler handler,
             string serviceKey,
             string partitionId,
+            [FromQuery] long? fromSequenceNumber,
             [FromQuery] string? continuationToken)
-            => handler.Execute(serviceKey, partitionId, continuationToken));
+            => handler.Execute(serviceKey, partitionId, fromSequenceNumber, continuationToken));
 
         return app;
     }

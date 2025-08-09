@@ -4,6 +4,7 @@ using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using MudBlazor;
 using TypedSignalR.Client;
 
 namespace LupusBytes.Azure.EventHubs.LiveExplorer.Client.Pages;
@@ -31,6 +32,10 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     private string input = string.Empty;
 
     private bool isValidInput;
+
+    private bool isPlaying = true;
+
+    private string CurrentIcon => isPlaying ? Icons.Material.Filled.Pause : Icons.Material.Filled.PlayArrow;
 
     public EventHub(HttpClient httpClient)
     {
@@ -83,13 +88,18 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             messages.Clear();
         }
 
+        isPlaying = true;
+
         eventHub = await httpClient.GetEventHubAsync(ServiceKey, cancellationToken);
         lastServiceKey = ServiceKey;
         lastPartitionIds = eventHub!.PartitionIds;
 
         foreach (var partitionId in eventHub.PartitionIds)
         {
-            await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(ServiceKey, partitionId, cancellationToken))
+            await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(
+                               ServiceKey,
+                               partitionId,
+                               cancellationToken: cancellationToken))
             {
                 messages.Add(message);
 
@@ -125,6 +135,53 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             await hub.CreateMessage(ServiceKey, input);
             input = string.Empty;
         }
+    }
+
+    private async Task TogglePlayPause()
+    {
+        isPlaying = !isPlaying;
+        var cancellationToken = processParametersCts?.Token ?? CancellationToken.None;
+
+        foreach (var partitionId in eventHub!.PartitionIds)
+        {
+            if (isPlaying)
+            {
+                await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(
+                                   ServiceKey,
+                                   partitionId,
+                                   FindHighestSequenceNumberByPartitionId(partitionId),
+                                   cancellationToken))
+                {
+                    messages.Add(message);
+
+                    if (messages.Count % 50 == 0)
+                    {
+                        await InvokeAsync(StateHasChanged);
+                    }
+                }
+
+                await hub.JoinGroup(ServiceKey, partitionId);
+            }
+            else
+            {
+                await hub.LeaveGroup(ServiceKey, partitionId);
+            }
+        }
+    }
+
+    private long FindHighestSequenceNumberByPartitionId(string partitionId)
+    {
+        // The messages list is sorted by sequence numbers ascending, so to efficiently find the latest sequence number
+        // we loop the list backwards and return the first sequence number that matches the partition id
+        for (var i = messages.Count - 1; i >= 0; i--)
+        {
+            if (messages[i].PartitionId == partitionId)
+            {
+                return messages[i].SequenceNumber;
+            }
+        }
+
+        return 0L;
     }
 
     public ValueTask DisposeAsync()

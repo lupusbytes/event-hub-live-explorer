@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
@@ -33,19 +34,22 @@ internal static class HttpClientExtensions
         this HttpClient httpClient,
         string serviceKey,
         string partitionId,
+        long? fromSequenceNumber = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         string? continuationToken = null;
         do
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                yield break;
-            }
+            var url = $"api/event-hubs/{serviceKey}/partitions/{partitionId}/events";
 
-            var url = continuationToken is null
-                ? $"api/event-hubs/{serviceKey}/partitions/{partitionId}/events"
-                : $"api/event-hubs/{serviceKey}/partitions/{partitionId}/events?continuationToken={continuationToken}";
+            if (continuationToken is not null)
+            {
+                url += $"?continuationToken={continuationToken}";
+            }
+            else if (fromSequenceNumber is not null)
+            {
+                url += "?fromSequenceNumber=" + fromSequenceNumber.Value.ToString(CultureInfo.InvariantCulture);
+            }
 
             var messagesByPartitionId = await httpClient.GetFromJsonAsync<PagedResult<EventHubMessage>>(
                 url,
