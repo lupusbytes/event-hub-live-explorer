@@ -11,6 +11,7 @@
 <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!isValidInput)" OnClick="@(() => SubmitAsync())">Submit</MudButton>
 <br />
 <MudIconButton Icon="@CurrentIcon" Color="Color.Primary" Size="Size.Medium" OnClick="@(() => TogglePlayPause())" />
+<MudIconButton Icon="@CustomIcons.Broom" Color="Color.Default" OnClick="@(ClearMessages)" />
 
 @if (messages.Count > 0)
 {

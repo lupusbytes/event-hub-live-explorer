@@ -18,6 +18,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     private readonly IDisposable? subscription;
     private readonly HttpClient httpClient;
     private EventHubInfo? eventHub;
+    private Dictionary<string, long>? latestSequenceNumberByPartitionId;
 
     private CancellationTokenSource? processParametersCts;
     private Task? processParametersTask;
@@ -137,6 +138,17 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         }
     }
 
+    private void ClearMessages()
+    {
+        latestSequenceNumberByPartitionId = lastPartitionIds?
+            .ToDictionary(
+                partitionId => partitionId,
+                FindLatestSequenceNumberByPartitionId,
+                StringComparer.OrdinalIgnoreCase);
+
+        messages.Clear();
+    }
+
     private async Task TogglePlayPause()
     {
         isPlaying = !isPlaying;
@@ -149,7 +161,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
                 await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(
                                    ServiceKey,
                                    partitionId,
-                                   FindHighestSequenceNumberByPartitionId(partitionId),
+                                   latestSequenceNumberByPartitionId?[partitionId],
                                    cancellationToken))
                 {
                     messages.Add(message);
@@ -165,11 +177,13 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             else
             {
                 await hub.LeaveGroup(ServiceKey, partitionId);
+                latestSequenceNumberByPartitionId ??= new Dictionary<string, long>(StringComparer.Ordinal);
+                latestSequenceNumberByPartitionId[partitionId] = FindLatestSequenceNumberByPartitionId(partitionId);
             }
         }
     }
 
-    private long FindHighestSequenceNumberByPartitionId(string partitionId)
+    private long FindLatestSequenceNumberByPartitionId(string partitionId)
     {
         // The messages list is sorted by sequence numbers ascending, so to efficiently find the latest sequence number
         // we loop the list backwards and return the first sequence number that matches the partition id
