@@ -24,7 +24,7 @@ jobs:
 
       - name: ⚙️ Setup dotnet 9.0.x
         if: ${{ steps.release.outputs.release_created }}
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
 
