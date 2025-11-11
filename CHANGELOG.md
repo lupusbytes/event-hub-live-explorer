@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.3](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.4.2...v1.4.3) (2025-11-11)
+
+
+### Upgrades
+
+* **deps:** update aspire monorepo to 9.5.2 ([12b04e2](https://github.com/lupusbytes/event-hub-live-explorer/commit/12b04e28b70bd965b88d069f497e87a831b35fec))
+* **deps:** update dependency mudblazor to 8.14.0 ([51cab79](https://github.com/lupusbytes/event-hub-live-explorer/commit/51cab793aa8db118aac3cc115e9eba2483d81ba3))
+* **deps:** update dotnet monorepo to 9.0.11 ([0441160](https://github.com/lupusbytes/event-hub-live-explorer/commit/0441160988b8ff84d62e2278b5287dcc93b5928a))
+
 ## [1.4.2](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.4.1...v1.4.2) (2025-09-26)
 
 
