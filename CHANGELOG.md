@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.0.0](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.4.3...v2.0.0) (2025-12-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** upgrade project to dotnet 10
+* **deps:** upgrade project to aspire v13
+
+### Upgrades
+
+* **deps:** update dependency mudblazor to 8.15.0 ([bb1c640](https://github.com/lupusbytes/event-hub-live-explorer/commit/bb1c640d7ff66074214b118f5e29a2c1298a214c))
+* **deps:** update dependency polly to 8.6.5 ([d1b0b64](https://github.com/lupusbytes/event-hub-live-explorer/commit/d1b0b64eebe202982607cc90178306209074aafe))
+* **deps:** upgrade project to aspire v13 ([11d4498](https://github.com/lupusbytes/event-hub-live-explorer/commit/11d449811812c1db716abd5d8650c8b2ecc57212))
+* **deps:** upgrade project to dotnet 10 ([6e27611](https://github.com/lupusbytes/event-hub-live-explorer/commit/6e27611ba07e1df66bdcb17e5221d7410014f88d))
+
 ## [1.4.3](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.4.2...v1.4.3) (2025-11-11)
 
 
