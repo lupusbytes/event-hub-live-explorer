@@ -23,7 +23,7 @@ Built with .NET Aspire in mind, it integrates smoothly into Aspire dashboards an
 ### 🧩 Usage in Aspire
 
 #### Prerequisites
-* [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+* [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 Install NuGet package [LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer](https://www.nuget.org/packages/LupusBytes.Aspire.Hosting.Azure.EventHubs.LiveExplorer/) in your Aspire AppHost project.
 
