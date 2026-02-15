@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.0.0...v2.0.1) (2026-02-15)
+
+
+### Upgrades
+
+* **deps:** update aspire monorepo to 13.1.1 ([5e5d51e](https://github.com/lupusbytes/event-hub-live-explorer/commit/5e5d51e0cedba9e3992851e176145cedcc2f1077))
+* **deps:** update dotnet monorepo to 10.0.3 ([a650450](https://github.com/lupusbytes/event-hub-live-explorer/commit/a650450920055e152551a5f317f5e064c0ffbeaa))
+
 ## [2.0.0](https://github.com/lupusbytes/event-hub-live-explorer/compare/v1.4.3...v2.0.0) (2025-12-13)
 
 
