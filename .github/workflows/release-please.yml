@@ -22,11 +22,11 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_PLEASE_PAT }}
 
-      - name: ⚙️ Setup dotnet 9.0.x
+      - name: ⚙️ Setup dotnet 10.0.x
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
 
       - name: 🧹 Clean
         if: ${{ steps.release.outputs.release_created }}
