@@ -23,6 +23,15 @@
 <MudIconButton Icon="@Icons.Material.Filled.TableChart" Color="Color.Default" OnClick="@ExportCsvAsync" Disabled="@(messages.Count == 0)" title="Export as CSV" />
 <MudChip T="string" Color="Color.Default" Size="Size.Small" Icon="@Icons.Material.Filled.Inbox" Style="pointer-events: none;">@messages.Count messages</MudChip>
 <MudChip T="string" Color="Color.Default" Size="Size.Small" Icon="@Icons.Material.Filled.Speed" Style="pointer-events: none;">@throughput.ToString("F1") msg/s</MudChip>
+<MudIconButton Icon="@Icons.Material.Filled.DonutSmall" Color="@(showChart ? Color.Primary : Color.Default)" Size="Size.Medium" OnClick="@(() => showChart = !showChart)" title="Toggle partition chart" />
+
+@if (showChart && messages.Count > 0)
+{
+    <MudPaper Class="pa-4 mb-4" Outlined="true">
+        <MudText Typo="Typo.subtitle2" Class="mb-2">Messages per Partition</MudText>
+        <MudChart ChartType="ChartType.Donut" InputData="@GetPartitionChartData()" InputLabels="@GetPartitionChartLabels()" Width="300px" Height="300px" />
+    </MudPaper>
+}
 
 @if (messages.Count > 0)
 {

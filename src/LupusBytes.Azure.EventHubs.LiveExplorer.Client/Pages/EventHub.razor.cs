@@ -63,6 +63,26 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     private int lastMessageCount;
     private Timer? throughputTimer;
 
+    private bool showChart;
+
+    private string[] GetPartitionChartLabels()
+    {
+        var partitionIds = eventHub?.PartitionIds ?? [];
+        var total = (double)messages.Count;
+        return partitionIds
+            .Select(id =>
+            {
+                var count = messages.Count(m => m.PartitionId == id);
+                var pct = total > 0 ? count / total * 100 : 0;
+                return $"Partition {id}: {count} messages ({pct:F1}%)";
+            })
+            .ToArray();
+    }
+
+    private double[] GetPartitionChartData() => (eventHub?.PartitionIds ?? [])
+        .Select(id => (double)messages.Count(m => m.PartitionId == id))
+        .ToArray();
+
     private string CurrentIcon => isPlaying ? Icons.Material.Filled.Pause : Icons.Material.Filled.PlayArrow;
 
     public EventHub(HttpClient httpClient)
@@ -121,6 +141,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             }
 
             messages.Clear();
+            lastMessageCount = 0;
         }
 
         isPlaying = true;
@@ -181,6 +202,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
                 StringComparer.OrdinalIgnoreCase);
 
         messages.Clear();
+        lastMessageCount = 0;
     }
 
     private async Task TogglePlayPause()
@@ -272,7 +294,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     private void OnThroughputTick(object? state)
     {
         var current = messages.Count;
-        throughput = current - lastMessageCount;
+        throughput = Math.Max(0, current - lastMessageCount);
         lastMessageCount = current;
         _ = InvokeAsync(StateHasChanged);
     }
