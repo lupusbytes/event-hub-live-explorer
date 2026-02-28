@@ -57,6 +57,8 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         .Where(m => string.IsNullOrEmpty(partitionFilter) || m.PartitionId == partitionFilter)
         .Where(m => string.IsNullOrEmpty(searchFilter) || m.Message.Contains(searchFilter, StringComparison.OrdinalIgnoreCase));
 
+    private bool IsInputValidJson => IsValidJson(input);
+
     private double throughput;
     private int lastMessageCount;
     private Timer? throughputTimer;
@@ -235,6 +237,37 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         WriteIndented = true,
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
     };
+
+    private static bool IsValidJson(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        try
+        {
+            using var doc = JsonDocument.Parse(text);
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
+    private void FormatInput()
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(input);
+            input = JsonSerializer.Serialize(doc, ExportJsonOptions);
+        }
+        catch (JsonException)
+        {
+            // Input is not valid JSON, keep as-is
+        }
+    }
 
     private void OnThroughputTick(object? state)
     {
