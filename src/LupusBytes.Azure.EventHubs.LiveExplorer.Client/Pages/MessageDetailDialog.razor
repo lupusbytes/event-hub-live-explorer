@@ -1,0 +1,11 @@
+<MudDialog>
+    <DialogContent>
+        <MudPaper Class="pa-4" Style="max-height: 70vh; overflow: auto;" Outlined="true">
+            <pre style="white-space: pre-wrap; word-break: break-word; margin: 0;">@FormattedMessage</pre>
+        </MudPaper>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CopyFormattedAsync" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.ContentCopy">Copy</MudButton>
+        <MudButton OnClick="Cancel">Close</MudButton>
+    </DialogActions>
+</MudDialog>
