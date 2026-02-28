@@ -1,6 +1,5 @@
 using LupusBytes.Azure.EventHubs.LiveExplorer;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Components;
-using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Extensions;
 using MudBlazor.Services;
 
