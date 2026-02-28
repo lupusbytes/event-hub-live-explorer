@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
 <MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
@@ -14,7 +14,6 @@
         <a href="https://github.com/lupusbytes/event-hub-live-explorer" target="_blank" rel="noopener noreferrer" >
             <MudIconButton Icon="@Icons.Custom.Brands.GitHub" aria-label="github" />
         </a>
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
     <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
