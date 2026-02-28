@@ -1,4 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Client.Extensions;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
@@ -214,6 +217,40 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         }
 
         return 0L;
+    }
+
+    private static readonly JsonSerializerOptions ExportJsonOptions = new()
+    {
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    };
+
+    private async Task ExportJsonAsync()
+    {
+        var export = FilteredMessages.Select(m => new
+        {
+            m.PartitionId,
+            m.SequenceNumber,
+            EnqueuedTime = m.EnqueuedTime.ToString("o"),
+            m.Message,
+        });
+        var json = JsonSerializer.Serialize(export, ExportJsonOptions);
+        await JS.InvokeVoidAsync("fileInterop.download", $"{ServiceKey}-messages.json", "application/json", json);
+    }
+
+    private async Task ExportCsvAsync()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("PartitionId,SequenceNumber,EnqueuedTime,Message");
+        foreach (var m in FilteredMessages)
+        {
+            sb.Append(m.PartitionId).Append(',');
+            sb.Append(m.SequenceNumber).Append(',');
+            sb.Append(m.EnqueuedTime.ToString("o")).Append(',');
+            sb.Append('"').Append(m.Message.Replace("\"", "\"\"", StringComparison.Ordinal)).AppendLine("\"");
+        }
+
+        await JS.InvokeVoidAsync("fileInterop.download", $"{ServiceKey}-messages.csv", "text/csv", sb.ToString());
     }
 
     private async Task CopyMessageAsync(string message)
