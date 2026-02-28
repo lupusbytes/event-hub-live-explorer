@@ -1,4 +1,3 @@
-using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 using Microsoft.AspNetCore.SignalR;
 

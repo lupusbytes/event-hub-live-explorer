@@ -1,7 +1,5 @@
-using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Consumer;
 using Azure.Messaging.EventHubs.Producer;
-using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Handlers;
 using Microsoft.AspNetCore.Hosting.Server;
