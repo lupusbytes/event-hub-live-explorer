@@ -5,10 +5,8 @@
 
 <MudText Typo="Typo.h4" GutterBottom="true">@ServiceKey</MudText>
 
-<MudForm @bind-IsValid="@isValidInput">
-    <MudTextField Immediate="true" T="string" Label="Event Hub message" @bind-Value="input" Required="true" RequiredError="A message is required!" Variant="Variant.Outlined" Placeholder="Enter your message..." Lines="3" />
-</MudForm>
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!isValidInput)" OnClick="@(() => SubmitAsync())">Submit</MudButton>
+<MudTextField Immediate="true" T="string" Label="Event Hub message" @bind-Value="input" Variant="Variant.Outlined" Placeholder="Enter your message..." Lines="3" />
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(string.IsNullOrWhiteSpace(input))" OnClick="@(() => SubmitAsync())">Submit</MudButton>
 <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Disabled="@(!IsInputValidJson)" OnClick="@FormatInput" StartIcon="@Icons.Material.Filled.AutoFixHigh">Format JSON</MudButton>
 @if (!string.IsNullOrWhiteSpace(input))
 {

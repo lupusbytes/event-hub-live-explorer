@@ -45,8 +45,6 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
 
     private string input = string.Empty;
 
-    private bool isValidInput;
-
     private bool isPlaying = true;
 
     private string searchFilter = string.Empty;
