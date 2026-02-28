@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -22,17 +23,23 @@ public sealed partial class MessageDetailDialog : ComponentBase
     private IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Inject]
-    private IJSRuntime JsRuntime { get; set; } = null!;
+    private IJSRuntime JS { get; set; } = null!;
 
     [Inject]
     private ISnackbar Snackbar { get; set; } = null!;
 
     [Parameter]
-    public string Message { get; set; } = string.Empty;
+    public EventHubMessage EventHubMessage { get; set; } = null!;
 
-    private string FormattedMessage => FormatJson(Message);
+    private bool HasMetadata =>
+        EventHubMessage.ContentType is not null ||
+        EventHubMessage.CorrelationId is not null ||
+        EventHubMessage.MessageId is not null ||
+        EventHubMessage.Properties is { Count: > 0 };
 
-    private MarkupString HighlightedMessage => new(HighlightJson(Message));
+    private string FormattedMessage => FormatJson(EventHubMessage.Message);
+
+    private MarkupString HighlightedMessage => new(HighlightJson(EventHubMessage.Message));
 
     private static string FormatJson(string raw)
     {
@@ -54,6 +61,7 @@ public sealed partial class MessageDetailDialog : ComponentBase
             using var doc = JsonDocument.Parse(raw);
             var sb = new StringBuilder();
             HighlightElement(doc.RootElement, sb, 0);
+
             return sb.ToString();
         }
         catch (JsonException)
@@ -62,7 +70,10 @@ public sealed partial class MessageDetailDialog : ComponentBase
         }
     }
 
-    private static void HighlightElement(JsonElement element, StringBuilder sb, int indent)
+    private static void HighlightElement(
+        JsonElement element,
+        StringBuilder sb,
+        int indent)
     {
         switch (element.ValueKind)
         {
@@ -88,18 +99,25 @@ public sealed partial class MessageDetailDialog : ComponentBase
         }
     }
 
-    private static void HighlightObject(JsonElement element, StringBuilder sb, int indent)
+    private static void HighlightObject(
+        JsonElement element,
+        StringBuilder sb,
+        int indent)
     {
         var pad = new string(' ', indent * 2);
         sb.Append("<span class=\"json-brace\">{</span>\n");
         var props = element.EnumerateObject().ToList();
+
         for (var i = 0; i < props.Count; i++)
         {
             var prop = props[i];
+
             sb.Append(pad).Append("  ");
             sb.Append("<span class=\"json-key\">\"").Append(WebUtility.HtmlEncode(prop.Name)).Append("\"</span>");
             sb.Append("<span class=\"json-colon\">: </span>");
+
             HighlightElement(prop.Value, sb, indent + 1);
+
             if (i < props.Count - 1)
             {
                 sb.Append(',');
@@ -111,15 +129,22 @@ public sealed partial class MessageDetailDialog : ComponentBase
         sb.Append(pad).Append("<span class=\"json-brace\">}</span>");
     }
 
-    private static void HighlightArray(JsonElement element, StringBuilder sb, int indent)
+    private static void HighlightArray(
+        JsonElement element,
+        StringBuilder sb,
+        int indent)
     {
         var pad = new string(' ', indent * 2);
+
         sb.Append("<span class=\"json-bracket\">[</span>\n");
+
         var items = element.EnumerateArray().ToList();
+
         for (var i = 0; i < items.Count; i++)
         {
             sb.Append(pad).Append("  ");
             HighlightElement(items[i], sb, indent + 1);
+
             if (i < items.Count - 1)
             {
                 sb.Append(',');
@@ -133,7 +158,7 @@ public sealed partial class MessageDetailDialog : ComponentBase
 
     private async Task CopyFormattedAsync()
     {
-        await JsRuntime.InvokeVoidAsync("clipboardInterop.writeText", FormattedMessage);
+        await JS.InvokeVoidAsync("clipboardInterop.writeText", FormattedMessage);
         Snackbar.Add("Copied to clipboard", Severity.Success);
     }
 

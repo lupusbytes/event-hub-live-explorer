@@ -222,11 +222,11 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         Snackbar.Add("Copied to clipboard", Severity.Success);
     }
 
-    private Task<IDialogReference> ShowMessageDetailAsync(string message)
+    private Task<IDialogReference> ShowMessageDetailAsync(EventHubMessage message)
     {
         var parameters = new DialogParameters<MessageDetailDialog>
         {
-            { x => x.Message, message },
+            { x => x.EventHubMessage, message },
         };
 
         var options = new DialogOptions

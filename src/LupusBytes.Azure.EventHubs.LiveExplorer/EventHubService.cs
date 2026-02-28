@@ -49,11 +49,19 @@ internal partial class EventHubService(
     {
         await foreach (var @event in consumer.ReadEventsAsync(stoppingToken))
         {
+            var properties = @event.Data.Properties.Count > 0
+                ? @event.Data.Properties.ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.Ordinal)
+                : null;
+
             var message = new EventHubMessage(
                 @event.Partition.PartitionId,
                 @event.Data.SequenceNumber,
                 @event.Data.EnqueuedTime,
-                @event.Data.EventBody.ToString());
+                @event.Data.EventBody.ToString(),
+                @event.Data.ContentType,
+                @event.Data.CorrelationId,
+                @event.Data.MessageId,
+                properties);
 
             partitions[@event.Partition.PartitionId].Add(message);
             await hubContext.Clients.Groups($"{serviceKey}-{@event.Partition.PartitionId}").LoadMessage(serviceKey, message);

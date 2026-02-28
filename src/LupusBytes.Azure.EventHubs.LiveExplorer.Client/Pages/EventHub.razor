@@ -53,7 +53,7 @@
                 <div style="display: flex; align-items: center; gap: 4px;">
                     <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1;">@context.Message</span>
                     <MudIconButton Icon="@Icons.Material.Filled.ContentCopy" Size="Size.Small" Style="flex-shrink: 0;" OnClick="@(() => CopyMessageAsync(context.Message))" title="Copy message" />
-                    <MudIconButton Icon="@Icons.Material.Filled.Visibility" Size="Size.Small" Style="flex-shrink: 0;" OnClick="@(() => ShowMessageDetailAsync(context.Message))" title="View message" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Visibility" Size="Size.Small" Style="flex-shrink: 0;" OnClick="@(() => ShowMessageDetailAsync(context))" title="View message" />
                 </div>
             </MudTd>
         </RowTemplate>
