@@ -14,6 +14,8 @@
 <MudIconButton Icon="@CustomIcons.Broom" Color="Color.Default" OnClick="@(ClearMessages)" />
 <MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Default" OnClick="@ExportJsonAsync" Disabled="@(messages.Count == 0)" title="Export as JSON" />
 <MudIconButton Icon="@Icons.Material.Filled.TableChart" Color="Color.Default" OnClick="@ExportCsvAsync" Disabled="@(messages.Count == 0)" title="Export as CSV" />
+<MudChip T="string" Color="Color.Default" Size="Size.Small" Icon="@Icons.Material.Filled.Inbox" Style="pointer-events: none;">@messages.Count messages</MudChip>
+<MudChip T="string" Color="Color.Default" Size="Size.Small" Icon="@Icons.Material.Filled.Speed" Style="pointer-events: none;">@throughput.ToString("F1") msg/s</MudChip>
 
 @if (messages.Count > 0)
 {

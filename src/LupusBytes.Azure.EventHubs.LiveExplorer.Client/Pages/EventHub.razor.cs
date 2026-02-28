@@ -57,6 +57,10 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         .Where(m => string.IsNullOrEmpty(partitionFilter) || m.PartitionId == partitionFilter)
         .Where(m => string.IsNullOrEmpty(searchFilter) || m.Message.Contains(searchFilter, StringComparison.OrdinalIgnoreCase));
 
+    private double throughput;
+    private int lastMessageCount;
+    private Timer? throughputTimer;
+
     private string CurrentIcon => isPlaying ? Icons.Material.Filled.Pause : Icons.Material.Filled.PlayArrow;
 
     public EventHub(HttpClient httpClient)
@@ -67,8 +71,15 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         subscription = connection.Register<ILiveExplorerClient>(this);
     }
 
-    protected override Task OnInitializedAsync()
-        => connection.StartAsync(CancellationToken.None);
+    protected override async Task OnInitializedAsync()
+    {
+        await connection.StartAsync(CancellationToken.None);
+        throughputTimer = new Timer(
+            OnThroughputTick,
+            null,
+            TimeSpan.FromSeconds(1),
+            TimeSpan.FromSeconds(1));
+    }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -225,6 +236,14 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
     };
 
+    private void OnThroughputTick(object? state)
+    {
+        var current = messages.Count;
+        throughput = current - lastMessageCount;
+        lastMessageCount = current;
+        _ = InvokeAsync(StateHasChanged);
+    }
+
     private async Task ExportJsonAsync()
     {
         var export = FilteredMessages.Select(m => new
@@ -276,10 +295,15 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         return DialogService.ShowAsync<MessageDetailDialog>("Message Detail", parameters, options);
     }
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
+        if (throughputTimer is not null)
+        {
+            await throughputTimer.DisposeAsync();
+        }
+
         subscription?.Dispose();
         processParametersCts?.Dispose();
-        return connection.DisposeAsync();
+        await connection.DisposeAsync();
     }
 }
