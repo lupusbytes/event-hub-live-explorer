@@ -15,12 +15,12 @@
 
 @if (messages.Count > 0)
 {
-    <MudTable Items="@messages" Hover="true" SortLabel="Sort By">
+    <MudTable Items="@messages" Hover="true" SortLabel="Sort By" TableClass="table-fixed-layout">
         <ColGroup>
-            <col style="width: 10%;" />
-            <col style="width: 10%;" />
-            <col style="width: 10%;" />
-            <col style="width: 70%;" />
+            <col style="width: 180px;" />
+            <col style="width: 120px;" />
+            <col style="width: 100px;" />
+            <col />
         </ColGroup>
         <HeaderContent>
             <MudTh>
@@ -40,7 +40,13 @@
             <MudTd DataLabel="Enqueued Time">@context.EnqueuedTime.ToLocalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffzzz")</MudTd>
             <MudTd DataLabel="Sequence Number">@context.SequenceNumber</MudTd>
             <MudTd DataLabel="Partition ID">@context.PartitionId</MudTd>
-            <MudTd DataLabel="Message">@context.Message</MudTd>
+            <MudTd DataLabel="Message" Style="overflow: hidden;">
+                <div style="display: flex; align-items: center; gap: 4px;">
+                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1;">@context.Message</span>
+                    <MudIconButton Icon="@Icons.Material.Filled.ContentCopy" Size="Size.Small" Style="flex-shrink: 0;" OnClick="@(() => CopyMessageAsync(context.Message))" title="Copy message" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Visibility" Size="Size.Small" Style="flex-shrink: 0;" OnClick="@(() => ShowMessageDetailAsync(context.Message))" title="View message" />
+                </div>
+            </MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new[] { 10, 25, 50, 100 }"/>

@@ -4,6 +4,7 @@ using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts;
 using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.JSInterop;
 using MudBlazor;
 using TypedSignalR.Client;
 
@@ -12,6 +13,15 @@ namespace LupusBytes.Azure.EventHubs.LiveExplorer.Client.Pages;
 [SuppressMessage("Maintainability", "CA1515:Consider making public types internal",  Justification = "Impossible")]
 public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyncDisposable
 {
+    [Inject]
+    private IDialogService DialogService { get; set; } = null!;
+
+    [Inject]
+    private ISnackbar Snackbar { get; set; } = null!;
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = null!;
+
     private readonly List<EventHubMessage> messages = [];
     private readonly HubConnection connection;
     private readonly ILiveExplorerHub hub;
@@ -196,6 +206,29 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         }
 
         return 0L;
+    }
+
+    private async Task CopyMessageAsync(string message)
+    {
+        await JS.InvokeVoidAsync("clipboardInterop.writeText", message);
+        Snackbar.Add("Copied to clipboard", Severity.Success);
+    }
+
+    private Task<IDialogReference> ShowMessageDetailAsync(string message)
+    {
+        var parameters = new DialogParameters<MessageDetailDialog>
+        {
+            { x => x.Message, message },
+        };
+
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = true,
+            CloseOnEscapeKey = true,
+        };
+
+        return DialogService.ShowAsync<MessageDetailDialog>("Message Detail", parameters, options);
     }
 
     public ValueTask DisposeAsync()
