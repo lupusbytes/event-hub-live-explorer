@@ -8,9 +8,14 @@ Built with .NET Aspire in mind, it integrates smoothly into Aspire dashboards an
 
 ## ✨ Features
 
-- 📤 **Send messages** directly to Event Hubs
+- 📤 **Send messages** directly to Event Hubs with JSON validation and formatting
 - 📥 **Read events** from multiple partitions in real time
-- 🛠️ Integrates with .NET Aspire 
+- 🔍 **Search and filter** messages by content or partition ID
+- 📋 **Copy and inspect** messages with syntax-highlighted JSON detail view
+- 📊 **Partition distribution chart** to visualize message spread across partitions
+- 📈 **Throughput indicator** showing message count and messages per second
+- 📥 **Export messages** as JSON or CSV
+- 🛠️ Integrates with .NET Aspire
 - 🧪 Ideal for local development and testing of event-based systems
 
 ---
