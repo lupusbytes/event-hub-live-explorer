@@ -12,6 +12,8 @@
 <br />
 <MudIconButton Icon="@CurrentIcon" Color="Color.Primary" Size="Size.Medium" OnClick="@(() => TogglePlayPause())" />
 <MudIconButton Icon="@CustomIcons.Broom" Color="Color.Default" OnClick="@(ClearMessages)" />
+<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Default" OnClick="@ExportJsonAsync" Disabled="@(messages.Count == 0)" title="Export as JSON" />
+<MudIconButton Icon="@Icons.Material.Filled.TableChart" Color="Color.Default" OnClick="@ExportCsvAsync" Disabled="@(messages.Count == 0)" title="Export as CSV" />
 
 @if (messages.Count > 0)
 {
