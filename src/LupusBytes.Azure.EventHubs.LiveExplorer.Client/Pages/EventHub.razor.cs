@@ -46,6 +46,14 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
 
     private bool isPlaying = true;
 
+    private string searchFilter = string.Empty;
+
+    private string? partitionFilter;
+
+    private IEnumerable<EventHubMessage> FilteredMessages => messages
+        .Where(m => string.IsNullOrEmpty(partitionFilter) || m.PartitionId == partitionFilter)
+        .Where(m => string.IsNullOrEmpty(searchFilter) || m.Message.Contains(searchFilter, StringComparison.OrdinalIgnoreCase));
+
     private string CurrentIcon => isPlaying ? Icons.Material.Filled.Pause : Icons.Material.Filled.PlayArrow;
 
     public EventHub(HttpClient httpClient)

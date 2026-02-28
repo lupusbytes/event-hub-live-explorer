@@ -15,7 +15,16 @@
 
 @if (messages.Count > 0)
 {
-    <MudTable Items="@messages" Hover="true" SortLabel="Sort By" TableClass="table-fixed-layout">
+    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 8px;">
+        <MudTextField @bind-Value="searchFilter" Immediate="true" Placeholder="Search messages..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Variant="Variant.Outlined" Margin="Margin.Dense" Style="flex: 1;" />
+        <MudSelect T="string" @bind-Value="partitionFilter" Label="Partition" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 150px;">
+            @foreach (var partitionId in eventHub?.PartitionIds ?? [])
+            {
+                <MudSelectItem Value="@partitionId">@partitionId</MudSelectItem>
+            }
+        </MudSelect>
+    </div>
+    <MudTable Items="@FilteredMessages" Hover="true" SortLabel="Sort By" TableClass="table-fixed-layout">
         <ColGroup>
             <col style="width: 180px;" />
             <col style="width: 120px;" />
