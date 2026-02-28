@@ -9,6 +9,13 @@
     <MudTextField Immediate="true" T="string" Label="Event Hub message" @bind-Value="input" Required="true" RequiredError="A message is required!" Variant="Variant.Outlined" Placeholder="Enter your message..." Lines="3" />
 </MudForm>
 <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!isValidInput)" OnClick="@(() => SubmitAsync())">Submit</MudButton>
+<MudButton Variant="Variant.Outlined" Color="Color.Secondary" Disabled="@(!IsInputValidJson)" OnClick="@FormatInput" StartIcon="@Icons.Material.Filled.AutoFixHigh">Format JSON</MudButton>
+@if (!string.IsNullOrWhiteSpace(input))
+{
+    <MudChip T="string" Color="@(IsInputValidJson ? Color.Success : Color.Default)" Size="Size.Small" Style="pointer-events: none;">
+        @(IsInputValidJson ? "Valid JSON" : "Plain text")
+    </MudChip>
+}
 <br />
 <MudIconButton Icon="@CurrentIcon" Color="Color.Primary" Size="Size.Medium" OnClick="@(() => TogglePlayPause())" />
 <MudIconButton Icon="@CustomIcons.Broom" Color="Color.Default" OnClick="@(ClearMessages)" />
