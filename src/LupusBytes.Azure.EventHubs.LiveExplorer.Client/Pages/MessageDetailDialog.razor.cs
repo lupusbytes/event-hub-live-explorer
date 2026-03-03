@@ -31,12 +31,6 @@ public sealed partial class MessageDetailDialog : ComponentBase
     [Parameter]
     public EventHubMessage EventHubMessage { get; set; } = null!;
 
-    private bool HasMetadata =>
-        EventHubMessage.ContentType is not null ||
-        EventHubMessage.CorrelationId is not null ||
-        EventHubMessage.MessageId is not null ||
-        EventHubMessage.Properties is { Count: > 0 };
-
     private string FormattedMessage => FormatJson(EventHubMessage.Message);
 
     private MarkupString HighlightedMessage => new(HighlightJson(EventHubMessage.Message));
@@ -154,6 +148,12 @@ public sealed partial class MessageDetailDialog : ComponentBase
         }
 
         sb.Append(pad).Append("<span class=\"json-bracket\">]</span>");
+    }
+
+    private async Task CopyRawAsync()
+    {
+        await JS.InvokeVoidAsync("clipboardInterop.writeText", EventHubMessage.Message);
+        Snackbar.Add("Copied to clipboard", Severity.Success);
     }
 
     private async Task CopyFormattedAsync()

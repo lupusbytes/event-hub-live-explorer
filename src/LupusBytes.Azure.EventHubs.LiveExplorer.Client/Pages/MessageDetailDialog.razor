@@ -1,39 +1,41 @@
 <MudDialog>
     <DialogContent>
-        @if (HasMetadata)
-        {
-            <MudText Typo="Typo.subtitle2" Class="mb-2">Metadata</MudText>
-            <MudSimpleTable Dense="true" Hover="true" Class="mb-4">
-                <tbody>
-                    @if (EventHubMessage.MessageId is not null)
+        <MudText Typo="Typo.subtitle2" Class="mb-2">Metadata</MudText>
+        <MudSimpleTable Dense="true" Hover="true" Class="mb-4">
+            <tbody>
+                <tr><td><strong>Partition ID</strong></td><td>@EventHubMessage.PartitionId</td></tr>
+                <tr><td><strong>Sequence Number</strong></td><td>@EventHubMessage.SequenceNumber</td></tr>
+                @if (EventHubMessage.MessageId is not null)
+                {
+                    <tr><td><strong>Message ID</strong></td><td>@EventHubMessage.MessageId</td></tr>
+                }
+                @if (EventHubMessage.CorrelationId is not null)
+                {
+                    <tr><td><strong>Correlation ID</strong></td><td>@EventHubMessage.CorrelationId</td></tr>
+                }
+                @if (EventHubMessage.ContentType is not null)
+                {
+                    <tr><td><strong>Content Type</strong></td><td>@EventHubMessage.ContentType</td></tr>
+                }
+                @if (EventHubMessage.Properties is { Count: > 0 })
+                {
+                    @foreach (var prop in EventHubMessage.Properties)
                     {
-                        <tr><td><strong>Message ID</strong></td><td>@EventHubMessage.MessageId</td></tr>
+                        <tr><td><strong>@prop.Key</strong></td><td>@prop.Value</td></tr>
                     }
-                    @if (EventHubMessage.CorrelationId is not null)
-                    {
-                        <tr><td><strong>Correlation ID</strong></td><td>@EventHubMessage.CorrelationId</td></tr>
-                    }
-                    @if (EventHubMessage.ContentType is not null)
-                    {
-                        <tr><td><strong>Content Type</strong></td><td>@EventHubMessage.ContentType</td></tr>
-                    }
-                    @if (EventHubMessage.Properties is { Count: > 0 })
-                    {
-                        @foreach (var prop in EventHubMessage.Properties)
-                        {
-                            <tr><td><strong>@prop.Key</strong></td><td>@prop.Value</td></tr>
-                        }
-                    }
-                </tbody>
-            </MudSimpleTable>
-        }
+                }
+            </tbody>
+        </MudSimpleTable>
         <MudText Typo="Typo.subtitle2" Class="mb-2">Body</MudText>
         <MudPaper Class="pa-4" Style="max-height: 60vh; overflow: auto;" Outlined="true">
             <pre class="json-viewer" style="white-space: pre-wrap; word-break: break-word; margin: 0;">@HighlightedMessage</pre>
         </MudPaper>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="CopyFormattedAsync" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.ContentCopy">Copy</MudButton>
+        <MudMenu Label="Copy" StartIcon="@Icons.Material.Filled.ContentCopy" Variant="Variant.Filled" Color="Color.Primary" AnchorOrigin="Origin.TopCenter" TransformOrigin="Origin.BottomCenter">
+            <MudMenuItem OnClick="CopyRawAsync">Copy Raw</MudMenuItem>
+            <MudMenuItem OnClick="CopyFormattedAsync">Copy Formatted</MudMenuItem>
+        </MudMenu>
         <MudButton OnClick="Cancel">Close</MudButton>
     </DialogActions>
 </MudDialog>
