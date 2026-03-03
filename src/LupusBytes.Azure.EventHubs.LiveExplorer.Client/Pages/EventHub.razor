@@ -27,7 +27,7 @@
     <MudIconButton Icon="@Icons.Material.Filled.DonutSmall" Color="Color.Default" Size="Size.Medium" title="Partition distribution" />
     <MudPopover Open="@(showChart && messages.Count > 0)" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Class="pa-4">
         <MudText Typo="Typo.subtitle2" Class="mb-2">Messages per Partition</MudText>
-        <MudChart ChartType="ChartType.Donut" InputData="@GetPartitionChartData()" InputLabels="@GetPartitionChartLabels()" Width="300px" Height="300px" />
+        <MudChart T="double" ChartType="ChartType.Donut" ChartSeries="@GetPartitionChartSeries()" ChartLabels="@GetPartitionChartLabels()" Width="300px" Height="300px" Style="height: auto !important;" />
     </MudPopover>
 </div>
 

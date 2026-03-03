@@ -81,9 +81,16 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             .ToArray();
     }
 
-    private double[] GetPartitionChartData() => (eventHub?.PartitionIds ?? [])
-        .Select(id => (double)messages.Count(m => m.PartitionId == id))
-        .ToArray();
+    private List<ChartSeries<double>> GetPartitionChartSeries() =>
+    [
+        new()
+        {
+            Name = "Messages",
+            Data = (eventHub?.PartitionIds ?? [])
+                .Select(id => (double)messages.Count(m => m.PartitionId == id))
+                .ToArray(),
+        },
+    ];
 
     private string CurrentIcon => isPlaying ? Icons.Material.Filled.Pause : Icons.Material.Filled.PlayArrow;
 
