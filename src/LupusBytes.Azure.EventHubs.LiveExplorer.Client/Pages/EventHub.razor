@@ -17,30 +17,34 @@
 <br />
 <MudIconButton Icon="@CurrentIcon" Color="Color.Primary" Size="Size.Medium" OnClick="@(() => TogglePlayPause())" />
 <MudIconButton Icon="@CustomIcons.Broom" Color="Color.Default" OnClick="@(ClearMessages)" />
-<MudIconButton Icon="@Icons.Material.Filled.Download" Color="Color.Default" OnClick="@ExportJsonAsync" Disabled="@(messages.Count == 0)" title="Export as JSON" />
-<MudIconButton Icon="@Icons.Material.Filled.TableChart" Color="Color.Default" OnClick="@ExportCsvAsync" Disabled="@(messages.Count == 0)" title="Export as CSV" />
+<MudMenu Icon="@Icons.Material.Filled.Download" Color="Color.Default" Disabled="@(messages.Count == 0)" title="Export" Dense="true" Size="Size.Medium" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Style="vertical-align: middle;">
+    <MudMenuItem OnClick="@ExportJsonAsync">Export as JSON</MudMenuItem>
+    <MudMenuItem OnClick="@ExportCsvAsync">Export as CSV</MudMenuItem>
+</MudMenu>
 <MudChip T="string" Color="Color.Default" Size="Size.Small" Icon="@Icons.Material.Filled.Inbox" Style="pointer-events: none;">@messages.Count messages</MudChip>
-<MudChip T="string" Color="Color.Default" Size="Size.Small" Icon="@Icons.Material.Filled.Speed" Style="pointer-events: none;">@throughput.ToString("F1") msg/s</MudChip>
-<MudIconButton Icon="@Icons.Material.Filled.DonutSmall" Color="@(showChart ? Color.Primary : Color.Default)" Size="Size.Medium" OnClick="@(() => showChart = !showChart)" title="Toggle partition chart" />
-
-@if (showChart && messages.Count > 0)
-{
-    <MudPaper Class="pa-4 mb-4" Outlined="true">
+<MudChip T="string" Color="Color.Default" Size="Size.Small" Icon="@Icons.Material.Filled.Speed" Style="pointer-events: none;">1m: @throughput1m.ToString("F1") msg/s | 5m: @throughput5m.ToString("F1") msg/s | 15m: @throughput15m.ToString("F1") msg/s | all: @throughputAll.ToString("F1") msg/s</MudChip>
+<div style="display: inline-block; position: relative;" @onmouseenter="@(() => showChart = true)" @onmouseleave="@(() => showChart = false)">
+    <MudIconButton Icon="@Icons.Material.Filled.DonutSmall" Color="Color.Default" Size="Size.Medium" title="Partition distribution" />
+    <MudPopover Open="@(showChart && messages.Count > 0)" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Class="pa-4">
         <MudText Typo="Typo.subtitle2" Class="mb-2">Messages per Partition</MudText>
         <MudChart ChartType="ChartType.Donut" InputData="@GetPartitionChartData()" InputLabels="@GetPartitionChartLabels()" Width="300px" Height="300px" />
-    </MudPaper>
-}
+    </MudPopover>
+</div>
 
 @if (messages.Count > 0)
 {
-    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 8px;">
-        <MudTextField @bind-Value="searchFilter" Immediate="true" Placeholder="Search messages..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Variant="Variant.Outlined" Margin="Margin.Dense" Style="flex: 1;" />
-        <MudSelect T="string" @bind-Value="partitionFilter" Label="Partition" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Style="width: 150px;">
-            @foreach (var partitionId in eventHub?.PartitionIds ?? [])
-            {
-                <MudSelectItem Value="@partitionId">@partitionId</MudSelectItem>
-            }
-        </MudSelect>
+    <div style="display: flex; gap: 16px; align-items: flex-end; margin-bottom: 8px; width: 100%;">
+        <div style="flex: 1; min-width: 0;">
+            <MudTextField @bind-Value="searchFilter" Immediate="true" Placeholder="Search messages..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Variant="Variant.Outlined" Margin="Margin.Dense" />
+        </div>
+        <div style="margin-left: auto; width: 150px;">
+            <MudSelect T="string" @bind-Value="partitionFilter" Label="Partition" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true">
+                @foreach (var partitionId in eventHub?.PartitionIds ?? [])
+                {
+                    <MudSelectItem Value="@partitionId">@partitionId</MudSelectItem>
+                }
+            </MudSelect>
+        </div>
     </div>
     <MudTable Items="@FilteredMessages" Hover="true" SortLabel="Sort By" TableClass="table-fixed-layout">
         <ColGroup>
