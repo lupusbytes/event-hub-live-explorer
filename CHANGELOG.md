@@ -1,5 +1,32 @@
 # Changelog
 
+## [2.1.0](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.0.1...v2.1.0) (2026-03-03)
+
+
+### New features
+
+* add message metadata panel to detail dialog ([841abe2](https://github.com/lupusbytes/event-hub-live-explorer/commit/841abe2ee57cc2152ab8e8c45406e7593a5cd154))
+* **client:** add JSON and CSV export for messages ([9990275](https://github.com/lupusbytes/event-hub-live-explorer/commit/999027563793943fc3e6420a1a2e4255a8756069))
+* **client:** add JSON formatting and copy-to-clipboard for messages ([b8ef89b](https://github.com/lupusbytes/event-hub-live-explorer/commit/b8ef89b16786624bfe5ad17dc9dd0c9b32837c33))
+* **client:** add JSON validation and format button for message input ([7b8c646](https://github.com/lupusbytes/event-hub-live-explorer/commit/7b8c646c30db851205345f865e12addf6e67e5f3))
+* **client:** add message count and throughput indicator ([f809160](https://github.com/lupusbytes/event-hub-live-explorer/commit/f8091605a3124e477337e0fa332fa737b8f80581))
+* **client:** add partition distribution donut chart ([0cd1ab2](https://github.com/lupusbytes/event-hub-live-explorer/commit/0cd1ab25ded3905e9287e8148fb261c916f347c0))
+* **client:** add rolling throughput, hover chart, export menu, and UX improvements ([d69050b](https://github.com/lupusbytes/event-hub-live-explorer/commit/d69050bea532b637cdcc4b0e37f409c501884572))
+* **client:** add search and partition filter for messages ([21c3a2c](https://github.com/lupusbytes/event-hub-live-explorer/commit/21c3a2cf0647125a5fbe544fdee10fbeac28320e))
+* **client:** add syntax-highlighted JSON in message detail dialog ([2ef8def](https://github.com/lupusbytes/event-hub-live-explorer/commit/2ef8def4d999fbd66e8b27c59ffd0427df66d3f0))
+* **client:** enhance message detail dialog with metadata and copy options ([02ebf8f](https://github.com/lupusbytes/event-hub-live-explorer/commit/02ebf8f36d42fcffcf3805e835b7f66bf26ada28))
+
+
+### Upgrades
+
+* **deps:** update aspire monorepo to 13.1.2 ([5f04ac5](https://github.com/lupusbytes/event-hub-live-explorer/commit/5f04ac57cbe050c39bb903ab1a6ff170c6b91185))
+* **deps:** update mudblazor to v9 ([5f8ac1e](https://github.com/lupusbytes/event-hub-live-explorer/commit/5f8ac1eb51336315b1bf6d4c167dfeb56d1f74d2))
+
+
+### Bug fixes
+
+* **client:** remove sticky validation error from message input field ([2a1b950](https://github.com/lupusbytes/event-hub-live-explorer/commit/2a1b950d862b0c6183ffe6a3400e5ec060464d57))
+
 ## [2.0.1](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.0.0...v2.0.1) (2026-02-15)
 
 
