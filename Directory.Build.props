@@ -10,7 +10,7 @@
   <PropertyGroup Label="Versioning">
     <!-- The 'x-release-please-' comments are used to inform the release-please action that it should update the semver version here -->
     <!-- x-release-please-start-version -->
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <!-- x-release-please-end -->
     <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
@@ -43,7 +43,7 @@
   <!-- Shared code analyzers used for all projects in the solution -->
   <ItemGroup Label="Code Analyzers">
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" />
-    <PackageReference Include="Meziantou.Analyzer" Version="3.0.25" PrivateAssets="All" />
+    <PackageReference Include="Meziantou.Analyzer" Version="3.0.18" PrivateAssets="All" />
     <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717" PrivateAssets="All" />
