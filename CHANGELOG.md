@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.5](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.4...v2.1.5) (2026-06-17)
+
+
+### Upgrades
+
+* **deps:** update aspire monorepo to 13.4.5 ([c103b9d](https://github.com/lupusbytes/event-hub-live-explorer/commit/c103b9d98a602cffe90abc20645b25d46bdd865e))
+
 ## [2.1.4](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.3...v2.1.4) (2026-06-16)
 
 
