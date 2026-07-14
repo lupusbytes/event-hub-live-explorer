@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.7](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.6...v2.1.7) (2026-07-14)
+
+
+### Upgrades
+
+* **deps:** update dependency mudblazor to 9.7.0 ([04fae43](https://github.com/lupusbytes/event-hub-live-explorer/commit/04fae43c821048ce1d403f3713a5935eb7b42f5b))
+* **deps:** update dotnet monorepo to 10.0.10 ([787c75d](https://github.com/lupusbytes/event-hub-live-explorer/commit/787c75dd177c9110da0e21c985245980539f8b27))
+
 ## [2.1.6](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.5...v2.1.6) (2026-06-21)
 
 
