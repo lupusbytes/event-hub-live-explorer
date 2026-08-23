@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.8](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.7...v2.1.8) (2026-08-23)
+
+
+### Upgrades
+
+* **deps:** update dotnet monorepo to 10.0.11 ([86ce439](https://github.com/lupusbytes/event-hub-live-explorer/commit/86ce43906c8388e4263076e27e1fbc8257a19afc))
+
 ## [2.1.7](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.6...v2.1.7) (2026-07-14)
 
 
