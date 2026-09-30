@@ -158,7 +158,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
 
         eventHub = await httpClient.GetEventHubAsync(ServiceKey, cancellationToken);
         lastServiceKey = ServiceKey;
-        lastPartitionIds = eventHub!.PartitionIds;
+        lastPartitionIds = eventHub.PartitionIds;
 
         if (partitionFilter is not null && !eventHub.PartitionIds.Contains(partitionFilter, StringComparer.Ordinal))
         {

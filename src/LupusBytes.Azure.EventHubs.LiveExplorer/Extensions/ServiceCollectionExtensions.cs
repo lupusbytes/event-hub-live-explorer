@@ -19,7 +19,7 @@ internal static class ServiceCollectionExtensions
             services.AddKeyedSingleton(
                 eventHub.ServiceKey,
                 (sp, serviceKey) => new EventHubService(
-                    (string)serviceKey!,
+                    (string)serviceKey,
                     eventHub.Endpoint,
                     new EventHubConsumerClient(eventHub.ConsumerGroup, eventHub.ConnectionString),
                     new EventHubProducerClient(eventHub.ConnectionString),
