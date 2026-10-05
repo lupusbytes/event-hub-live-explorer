@@ -93,6 +93,6 @@ internal partial class EventHubService(
     [LoggerMessage(
         EventId = 1,
         Level = LogLevel.Error,
-        Message = "Exception occured while reading and processing events from EventHub {Name} in namespace {EventHubNamespace}")]
+        Message = "Exception occurred while reading and processing events from EventHub {Name} in namespace {EventHubNamespace}")]
     private partial void LogExecutionException(Exception ex, string eventHubNamespace, string name);
 }
