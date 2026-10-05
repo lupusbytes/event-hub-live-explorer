@@ -10,7 +10,8 @@ using Polly;
 namespace LupusBytes.Azure.EventHubs.LiveExplorer;
 
 internal partial class EventHubService(
-    string serviceKey,
+    string eventHubNamespace,
+    string name,
     string endpoint,
     EventHubConsumerClient consumer,
     EventHubProducerClient producer,
@@ -20,7 +21,9 @@ internal partial class EventHubService(
 {
     private Dictionary<string, List<EventHubMessage>> partitions = [];
 
-    public string ServiceKey => serviceKey;
+    public string Namespace => eventHubNamespace;
+
+    public string Name => name;
 
     public string Endpoint => endpoint;
 
@@ -40,7 +43,7 @@ internal partial class EventHubService(
             }
             catch (Exception ex)
             {
-                LogExecutionException(ex, serviceKey);
+                LogExecutionException(ex, eventHubNamespace, name);
             }
         }
     }
@@ -64,7 +67,9 @@ internal partial class EventHubService(
                 properties);
 
             partitions[@event.Partition.PartitionId].Add(message);
-            await hubContext.Clients.Groups($"{serviceKey}-{@event.Partition.PartitionId}").LoadMessage(serviceKey, message);
+            await hubContext.Clients
+                .Group(LiveExplorerHub.GetGroupName(eventHubNamespace, name, @event.Partition.PartitionId))
+                .LoadMessage(eventHubNamespace, name, message);
         }
     }
 
@@ -88,6 +93,6 @@ internal partial class EventHubService(
     [LoggerMessage(
         EventId = 1,
         Level = LogLevel.Error,
-        Message = "Exception occured while reading and processing events from EventHub with key: {ServiceKey}")]
-    private partial void LogExecutionException(Exception ex, string serviceKey);
+        Message = "Exception occured while reading and processing events from EventHub {Name} in namespace {EventHubNamespace}")]
+    private partial void LogExecutionException(Exception ex, string eventHubNamespace, string name);
 }

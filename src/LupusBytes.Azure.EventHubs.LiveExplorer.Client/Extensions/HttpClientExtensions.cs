@@ -20,11 +20,12 @@ internal static class HttpClientExtensions
 
     public static async Task<EventHubInfo> GetEventHubAsync(
         this HttpClient httpClient,
-        string serviceKey,
+        string eventHubNamespace,
+        string name,
         CancellationToken cancellationToken = default)
     {
         var eventHub = await httpClient.GetFromJsonAsync<EventHubInfo>(
-            $"api/event-hubs/{serviceKey}",
+            $"api/event-hubs/{eventHubNamespace}/{name}",
             cancellationToken);
 
         return eventHub!;
@@ -32,7 +33,8 @@ internal static class HttpClientExtensions
 
     public static async IAsyncEnumerable<EventHubMessage> GetEventHubPartitionMessagesAsync(
         this HttpClient httpClient,
-        string serviceKey,
+        string eventHubNamespace,
+        string name,
         string partitionId,
         long? fromSequenceNumber = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -40,7 +42,7 @@ internal static class HttpClientExtensions
         string? continuationToken = null;
         do
         {
-            var url = $"api/event-hubs/{serviceKey}/partitions/{partitionId}/events";
+            var url = $"api/event-hubs/{eventHubNamespace}/{name}/partitions/{partitionId}/events";
 
             if (continuationToken is not null)
             {

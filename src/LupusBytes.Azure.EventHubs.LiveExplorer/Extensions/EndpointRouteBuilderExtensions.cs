@@ -11,18 +11,20 @@ internal static class EndpointRouteBuilderExtensions
             [FromServices] GetEventHubsHandler handler)
             => handler.Execute());
 
-        app.MapGet("/api/event-hubs/{serviceKey}", (
+        app.MapGet("/api/event-hubs/{eventHubNamespace}/{name}", (
             [FromServices] GetEventHubHandler handler,
-            string serviceKey)
-            => handler.Execute(serviceKey));
+            string eventHubNamespace,
+            string name)
+            => handler.Execute(eventHubNamespace, name));
 
-        app.MapGet("/api/event-hubs/{serviceKey}/partitions/{partitionId}/events", (
+        app.MapGet("/api/event-hubs/{eventHubNamespace}/{name}/partitions/{partitionId}/events", (
             [FromServices] GetEventHubPartitionEventsHandler handler,
-            string serviceKey,
+            string eventHubNamespace,
+            string name,
             string partitionId,
             [FromQuery] long? fromSequenceNumber,
             [FromQuery] string? continuationToken)
-            => handler.Execute(serviceKey, partitionId, fromSequenceNumber, continuationToken));
+            => handler.Execute(eventHubNamespace, name, partitionId, fromSequenceNumber, continuationToken));
 
         return app;
     }

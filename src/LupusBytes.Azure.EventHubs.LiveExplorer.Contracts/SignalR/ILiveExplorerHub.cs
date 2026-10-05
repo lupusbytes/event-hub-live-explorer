@@ -2,9 +2,9 @@ namespace LupusBytes.Azure.EventHubs.LiveExplorer.Contracts.SignalR;
 
 public interface ILiveExplorerHub
 {
-    Task CreateMessage(string serviceKey, string message);
+    Task CreateMessage(string eventHubNamespace, string name, string message);
 
-    Task JoinGroup(string serviceKey, string partitionId);
+    Task JoinGroup(string eventHubNamespace, string name, string partitionId);
 
-    Task LeaveGroup(string serviceKey, string partitionId);
+    Task LeaveGroup(string eventHubNamespace, string name, string partitionId);
 }

@@ -1,9 +1,10 @@
-@page "/event-hubs/{serviceKey}"
+@page "/event-hubs/{namespace}/{name}"
 @using LupusBytes.Azure.EventHubs.LiveExplorer.Contracts
 
-<PageTitle>@ServiceKey</PageTitle>
+<PageTitle>@Name</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">@ServiceKey</MudText>
+<MudText Typo="Typo.h4">@Name</MudText>
+<MudText Typo="Typo.subtitle2" GutterBottom="true" Style="opacity: 0.7;">@eventHub?.Endpoint</MudText>
 
 <MudTextField Immediate="true" T="string" Label="Event Hub message" @bind-Value="input" Variant="Variant.Outlined" Placeholder="Enter your message..." Lines="3" />
 <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(string.IsNullOrWhiteSpace(input))" OnClick="@(() => SubmitAsync())">Submit</MudButton>

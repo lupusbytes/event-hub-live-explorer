@@ -37,11 +37,12 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     private Task? processParametersTask;
 
     [Parameter]
-    public string ServiceKey { get; set; } = string.Empty;
+    public string Namespace { get; set; } = string.Empty;
 
-    private string? lastServiceKey;
+    [Parameter]
+    public string Name { get; set; } = string.Empty;
 
-    private IReadOnlyCollection<string>? lastPartitionIds;
+    private EventHubInfo? lastEventHub;
 
     private string input = string.Empty;
 
@@ -142,11 +143,11 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
 
     private async Task ProcessParametersAsync(CancellationToken cancellationToken)
     {
-        if (lastServiceKey is not null && lastPartitionIds is not null)
+        if (lastEventHub is not null)
         {
-            foreach (var partitionId in lastPartitionIds)
+            foreach (var partitionId in lastEventHub.PartitionIds)
             {
-                await hub.LeaveGroup(lastServiceKey, partitionId);
+                await hub.LeaveGroup(lastEventHub.Namespace, lastEventHub.Name, partitionId);
             }
 
             messages.Clear();
@@ -156,9 +157,8 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
 
         isPlaying = true;
 
-        eventHub = await httpClient.GetEventHubAsync(ServiceKey, cancellationToken);
-        lastServiceKey = ServiceKey;
-        lastPartitionIds = eventHub.PartitionIds;
+        eventHub = await httpClient.GetEventHubAsync(Namespace, Name, cancellationToken);
+        lastEventHub = eventHub;
 
         if (partitionFilter is not null && !eventHub.PartitionIds.Contains(partitionFilter, StringComparer.Ordinal))
         {
@@ -168,7 +168,8 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
         foreach (var partitionId in eventHub.PartitionIds)
         {
             await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(
-                               ServiceKey,
+                               eventHub.Namespace,
+                               eventHub.Name,
                                partitionId,
                                cancellationToken: cancellationToken))
             {
@@ -182,15 +183,16 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            await hub.JoinGroup(ServiceKey, partitionId);
+            await hub.JoinGroup(eventHub.Namespace, eventHub.Name, partitionId);
         }
 
         await InvokeAsync(StateHasChanged);
     }
 
-    public Task LoadMessage(string serviceKey, EventHubMessage message)
+    public Task LoadMessage(string eventHubNamespace, string name, EventHubMessage message)
     {
-        if (serviceKey != ServiceKey)
+        if (!string.Equals(eventHubNamespace, eventHub?.Namespace, StringComparison.Ordinal) ||
+            !string.Equals(name, eventHub?.Name, StringComparison.Ordinal))
         {
             return Task.CompletedTask;
         }
@@ -203,14 +205,14 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
     {
         if (!string.IsNullOrWhiteSpace(input))
         {
-            await hub.CreateMessage(ServiceKey, input);
+            await hub.CreateMessage(eventHub!.Namespace, eventHub.Name, input);
             input = string.Empty;
         }
     }
 
     private void ClearMessages()
     {
-        latestSequenceNumberByPartitionId = lastPartitionIds?
+        latestSequenceNumberByPartitionId = lastEventHub?.PartitionIds
             .ToDictionary(
                 partitionId => partitionId,
                 FindLatestSequenceNumberByPartitionId,
@@ -231,7 +233,8 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             if (isPlaying)
             {
                 await foreach (var message in httpClient.GetEventHubPartitionMessagesAsync(
-                                   ServiceKey,
+                                   eventHub.Namespace,
+                                   eventHub.Name,
                                    partitionId,
                                    latestSequenceNumberByPartitionId?[partitionId],
                                    cancellationToken))
@@ -244,11 +247,11 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
                     }
                 }
 
-                await hub.JoinGroup(ServiceKey, partitionId);
+                await hub.JoinGroup(eventHub.Namespace, eventHub.Name, partitionId);
             }
             else
             {
-                await hub.LeaveGroup(ServiceKey, partitionId);
+                await hub.LeaveGroup(eventHub.Namespace, eventHub.Name, partitionId);
                 latestSequenceNumberByPartitionId ??= new Dictionary<string, long>(StringComparer.Ordinal);
                 latestSequenceNumberByPartitionId[partitionId] = FindLatestSequenceNumberByPartitionId(partitionId);
             }
@@ -376,7 +379,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             m.Message,
         });
         var json = JsonSerializer.Serialize(export, ExportJsonOptions);
-        await JS.InvokeVoidAsync("fileInterop.download", $"{ServiceKey}-messages.json", "application/json", json);
+        await JS.InvokeVoidAsync("fileInterop.download", $"{Name}-messages.json", "application/json", json);
     }
 
     private async Task ExportCsvAsync()
@@ -391,7 +394,7 @@ public sealed partial class EventHub : ComponentBase, ILiveExplorerClient, IAsyn
             sb.Append('"').Append(m.Message.Replace("\"", "\"\"", StringComparison.Ordinal)).AppendLine("\"");
         }
 
-        await JS.InvokeVoidAsync("fileInterop.download", $"{ServiceKey}-messages.csv", "text/csv", sb.ToString());
+        await JS.InvokeVoidAsync("fileInterop.download", $"{Name}-messages.csv", "text/csv", sb.ToString());
     }
 
     private async Task CopyMessageAsync(string message)

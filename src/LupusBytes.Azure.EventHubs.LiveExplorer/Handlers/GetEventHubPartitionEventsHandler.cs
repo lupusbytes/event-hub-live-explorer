@@ -7,14 +7,15 @@ namespace LupusBytes.Azure.EventHubs.LiveExplorer.Handlers;
 internal class GetEventHubPartitionEventsHandler(EventHubServiceProvider eventHubServiceProvider)
 {
     public Results<Ok<PagedResult<EventHubMessage>>, NotFound> Execute(
-        string serviceKey,
+        string eventHubNamespace,
+        string name,
         string partitionId,
         long? fromSequenceNumber,
         string? continuationToken)
     {
         const int maxEventsPerRequest = 50;
 
-        if (!eventHubServiceProvider.TryGetEventHubService(serviceKey, out var eventHubService) ||
+        if (!eventHubServiceProvider.TryGetEventHubService(eventHubNamespace, name, out var eventHubService) ||
             !eventHubService.TryGetEventsFromPartition(partitionId, out var partitionEvents))
         {
             return TypedResults.NotFound();

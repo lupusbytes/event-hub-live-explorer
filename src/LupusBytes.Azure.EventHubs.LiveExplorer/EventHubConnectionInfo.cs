@@ -1,7 +1,11 @@
 namespace LupusBytes.Azure.EventHubs.LiveExplorer;
 
 internal sealed record EventHubConnectionInfo(
-    string ServiceKey,
+    string Namespace,
+    string Name,
     string ConnectionString,
     string Endpoint,
-    string ConsumerGroup);
+    string ConsumerGroup)
+{
+    public string Id => $"{Namespace}/{Name}";
+}
