@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.1.8](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.7...v2.1.8) (2026-10-05)
+
+
+### Upgrades
+
+* **deps:** update aspire monorepo to 13.6.0 ([2812a78](https://github.com/lupusbytes/event-hub-live-explorer/commit/2812a78cce75abdb4b9f79a3c620d8cef353a76b))
+* **deps:** update dependency mudblazor to 9.11.0 ([44442f1](https://github.com/lupusbytes/event-hub-live-explorer/commit/44442f1c1a7ee2cb793060af541eb1c1a4c41c80))
+* **deps:** update dependency polly to 8.8.0 ([7a048b8](https://github.com/lupusbytes/event-hub-live-explorer/commit/7a048b867d8a52854fd3bb1279b662d295c6253f))
+* **deps:** update dotnet monorepo to 10.0.12 ([6e4bcca](https://github.com/lupusbytes/event-hub-live-explorer/commit/6e4bcca46c494d15f0a6043b20253496a8fc753e))
+
+
+### Bug fixes
+
+* ensure event hubs are only added once to nav menu after aspire 13.6 alias update ([#128](https://github.com/lupusbytes/event-hub-live-explorer/issues/128)) ([be52c57](https://github.com/lupusbytes/event-hub-live-explorer/commit/be52c5743c29d98008b936e072d6707155a52691))
+
 ## [2.1.7](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.6...v2.1.7) (2026-07-14)
 
 
