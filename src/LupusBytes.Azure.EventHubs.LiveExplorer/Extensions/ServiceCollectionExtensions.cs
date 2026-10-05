@@ -17,9 +17,10 @@ internal static class ServiceCollectionExtensions
             services.AddSingleton(eventHub);
 
             services.AddKeyedSingleton(
-                eventHub.ServiceKey,
-                (sp, serviceKey) => new EventHubService(
-                    (string)serviceKey,
+                eventHub.Id,
+                (sp, _) => new EventHubService(
+                    eventHub.Namespace,
+                    eventHub.Name,
                     eventHub.Endpoint,
                     new EventHubConsumerClient(eventHub.ConsumerGroup, eventHub.ConnectionString),
                     new EventHubProducerClient(eventHub.ConnectionString),
@@ -27,7 +28,7 @@ internal static class ServiceCollectionExtensions
                     sp.GetRequiredService<ILogger<EventHubService>>()));
 
             services.AddSingleton<IHostedService>(
-                sp => sp.GetRequiredKeyedService<EventHubService>(eventHub.ServiceKey));
+                sp => sp.GetRequiredKeyedService<EventHubService>(eventHub.Id));
         }
 
         services.AddSingleton<EventHubServiceProvider>();

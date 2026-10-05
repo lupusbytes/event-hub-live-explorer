@@ -5,8 +5,8 @@ namespace LupusBytes.Azure.EventHubs.LiveExplorer.Handlers;
 
 internal class GetEventHubHandler(EventHubServiceProvider eventHubServiceProvider)
 {
-    public Results<Ok<EventHubInfo>, NotFound> Execute(string serviceKey)
-        => eventHubServiceProvider.TryGetEventHubService(serviceKey, out var service)
-            ? TypedResults.Ok(new EventHubInfo(service.Endpoint, service.ServiceKey, service.PartitionIds))
+    public Results<Ok<EventHubInfo>, NotFound> Execute(string eventHubNamespace, string name)
+        => eventHubServiceProvider.TryGetEventHubService(eventHubNamespace, name, out var service)
+            ? TypedResults.Ok(new EventHubInfo(service.Endpoint, service.Namespace, service.Name, service.PartitionIds))
             : TypedResults.NotFound();
 }

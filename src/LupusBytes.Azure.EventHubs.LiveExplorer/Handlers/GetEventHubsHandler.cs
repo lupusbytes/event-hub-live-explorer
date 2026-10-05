@@ -8,5 +8,5 @@ internal class GetEventHubsHandler(EventHubServiceProvider eventHubServiceProvid
     public Ok<IEnumerable<EventHubInfo>> Execute() => TypedResults.Ok(
         eventHubServiceProvider
             .GetEventHubServices()
-            .Select(x => new EventHubInfo(x.Endpoint, x.ServiceKey, x.PartitionIds)));
+            .Select(x => new EventHubInfo(x.Endpoint, x.Namespace, x.Name, x.PartitionIds)));
 }

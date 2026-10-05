@@ -5,27 +5,28 @@ namespace LupusBytes.Azure.EventHubs.LiveExplorer;
 
 internal class LiveExplorerHub(EventHubServiceProvider serviceProvider) : Hub<ILiveExplorerClient>, ILiveExplorerHub
 {
-    public Task CreateMessage(string serviceKey, string message)
+    public Task CreateMessage(string eventHubNamespace, string name, string message)
         => serviceProvider
-        .GetEventHubService(serviceKey)
+        .GetEventHubService(eventHubNamespace, name)
         .SendEventAsync(
             message,
             Context.ConnectionAborted);
 
     public Task JoinGroup(
-        string serviceKey,
+        string eventHubNamespace,
+        string name,
         string partitionId)
         => Groups.AddToGroupAsync(
             Context.ConnectionId,
-            GetGroupName(serviceKey, partitionId),
+            GetGroupName(eventHubNamespace, name, partitionId),
             Context.ConnectionAborted);
 
-    public Task LeaveGroup(string serviceKey, string partitionId)
+    public Task LeaveGroup(string eventHubNamespace, string name, string partitionId)
         => Groups.RemoveFromGroupAsync(
             Context.ConnectionId,
-            GetGroupName(serviceKey, partitionId),
+            GetGroupName(eventHubNamespace, name, partitionId),
             Context.ConnectionAborted);
 
-    private static string GetGroupName(string serviceKey, string partitionId)
-        => $"{serviceKey}-{partitionId}";
+    internal static string GetGroupName(string eventHubNamespace, string name, string partitionId)
+        => $"{eventHubNamespace}/{name}/{partitionId}";
 }

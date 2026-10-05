@@ -9,9 +9,9 @@
     {
         <MudDivider Class="my-2" />
         <MudText Typo="Typo.subtitle2" Class="ml-4 mb-1" Style="opacity: 0.7;">@group.Key</MudText>
-        @foreach (var serviceKey in group.Select(x => x.ServiceKey))
+        @foreach (var eventHub in group)
         {
-            <MudNavLink Href="@($"/event-hubs/{serviceKey}")" Match="NavLinkMatch.Prefix">
+            <MudNavLink Href="@($"/event-hubs/{eventHub.Namespace}/{eventHub.Name}")" Match="NavLinkMatch.Prefix">
                 <span style="display: flex; align-items: center;">
                     <span style="flex: 0 0 24px; display: flex; align-items: center; margin-right: 8px;">
                         <svg width="24" height="24" viewBox="0 0 18 18">
@@ -35,7 +35,7 @@
                             </g>
                         </svg>
                     </span>
-                    <span style="flex: 1 1 0; min-width: 0;">@serviceKey</span>
+                    <span style="flex: 1 1 0; min-width: 0;">@eventHub.Name</span>
                 </span>
             </MudNavLink>
         }
