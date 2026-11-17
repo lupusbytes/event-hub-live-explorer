@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.1.10](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.9...v2.1.10) (2026-11-17)
+
+
+### Upgrades
+
+* **deps:** update aspire monorepo to 13.6.5 ([36e41cd](https://github.com/lupusbytes/event-hub-live-explorer/commit/36e41cd7d4bc52360cb5ca831d156a38b930fc7d))
+* **deps:** update dependency mudblazor to 9.14.0 ([192906b](https://github.com/lupusbytes/event-hub-live-explorer/commit/192906bd8c4efebe68ab0321d44ee08b8f357940))
+* **deps:** update dependency polly to 8.9.1 ([32ed17f](https://github.com/lupusbytes/event-hub-live-explorer/commit/32ed17f77a5779d33cc11a436964c6cdf1d39aba))
+* **deps:** update dependency typedsignalr.client to 3.7.0 ([8f3bb69](https://github.com/lupusbytes/event-hub-live-explorer/commit/8f3bb691659d249369e9760a4c4e072ac9175f91))
+* **deps:** update dotnet monorepo to 10.0.15 ([4eaf617](https://github.com/lupusbytes/event-hub-live-explorer/commit/4eaf617a8738955eb54f73bb4bfbfa326b3300d6))
+
 ## [2.1.9](https://github.com/lupusbytes/event-hub-live-explorer/compare/v2.1.8...v2.1.9) (2026-10-05)
 
 
